@@ -1,0 +1,28 @@
+//
+//  Development.xcconfig
+//  DapurNaura
+//
+//  Audience : developers and QA
+//  Backend  : staging
+//  Built and run from Xcode. Never uploaded to App Store Connect.
+//
+//  COMMITTED. Self-contained — everything this variant needs is below, except the
+//  API key, which is the one value that cannot live in git.
+//
+//  Note: `//` starts a comment in xcconfig, so URLs escape it as `https:/$()/`.
+//
+
+#include "Secrets.xcconfig"
+
+// Partial Info.plist carrying the $(VAR) placeholders. Xcode merges its generated
+// keys on top, so that file only holds what we substitute ourselves.
+INFOPLIST_FILE = DapurNaura/Info.plist
+
+// The only variant with its own bundle id, so a developer can keep a TestFlight
+// build installed alongside it.
+PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNaura.dev
+APP_DISPLAY_NAME = DapurNaura Dev
+
+API_BASE_URL = https:/$()/api.rawg.io/api/games
+API_KEY = $(STAGING_API_KEY)
+ENABLE_NETWORK_LOGGING = YES
