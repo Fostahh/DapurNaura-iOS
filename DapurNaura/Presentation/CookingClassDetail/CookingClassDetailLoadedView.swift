@@ -36,8 +36,22 @@ struct CookingClassDetailLoadedView: View {
                 Text("Resep")
                     .font(.headline)
 
+                // DN-015: the screen decides the destination, not the row.
+                // `RecipeRow` renders and knows nothing about `Route` — recipes
+                // open only in a class the user has bought, and in every other
+                // state the row is inert. The ingredients, method and video are
+                // not merely hidden then; the server never sent them.
                 ForEach(detail.recipes, id: \.id) { recipe in
-                    RecipeLink(recipe: recipe, classId: detail.id, openable: isPurchased)
+                    if isPurchased {
+                        NavigationLink(
+                            value: Route.recipes(.detail(classId: detail.id, recipeId: recipe.id))
+                        ) {
+                            RecipeRow(recipe: recipe, openable: true)
+                        }
+                        .buttonStyle(.plain)
+                    } else {
+                        RecipeRow(recipe: recipe, openable: false)
+                    }
                 }
             }
             .padding()

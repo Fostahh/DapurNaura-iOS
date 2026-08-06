@@ -9,8 +9,8 @@ import SwiftUI
 
 /// The single place a `Route` becomes a view.
 ///
-/// A `View` struct rather than a `@ViewBuilder` helper, per §3 — SwiftUI diffs at
-/// struct boundaries, and a helper property is inlined into its parent's body.
+/// A `View` struct rather than a `@ViewBuilder` helper, per §3 — a struct can be
+/// constructed and previewed on its own; an inlined helper property cannot.
 struct RouteDestination: View {
     let route: Route
     let factory: ViewModelFactory

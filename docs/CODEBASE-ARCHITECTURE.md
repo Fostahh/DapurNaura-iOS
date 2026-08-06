@@ -63,11 +63,61 @@ final class CookingClassListViewModel {
 
 - **One type per file. Must.** A `CookingClassRow` living at the bottom of `CookingClassListView.swift`
   is a violation, not a convenience.
-- **Break views up with `View` structs, not computed properties or methods that return `some View`.**
-  `@ViewBuilder` on a property does not give you what a real struct does — SwiftUI diffs and
-  re-renders at struct boundaries, and a helper property is inlined into the parent's body.
+- **A view that renders state must be constructible from that state alone. Must.** Not from a
+  ViewModel — from the plain values it draws. A screen therefore splits in two: `<Feature>View`
+  owns the ViewModel, the `.task` and the navigation modifiers; `<Feature>Content` takes `state`
+  plus any callbacks and does the drawing.
+
+  **The reason is previews, and only previews.** The test is mechanical: *can you `#Preview` it in
+  every state?* If it needs a ViewModel, no — the ViewModel needs a use case, which needs a
+  `DNDataLayer`. `DNDataLayer.companion.stub()` makes the happy path previewable, but **the stub
+  never fails**, so `.failed` is unreachable, and so is `.loaded` with the awkward data — the long
+  class name beside the widest badge, the recipe with `loyang` but no `portions`. Those are exactly
+  the cases worth looking at before a device.
+
+  **This rule is stricter than general SwiftUI practice, deliberately.** Apple's own samples use
+  `@ViewBuilder private var content` freely, and there is nothing wrong with it — the earlier
+  version of this rule justified the ban by SwiftUI diffing at struct boundaries, which is true in
+  general but **buys nothing here**: the input that changed is the state the property switches on,
+  so an extracted struct re-renders too. A rule defended by a reason that does not survive checking
+  teaches people to stop trusting the document. The reason is previewability. Nothing else.
+
+  A screen's `Content` view is still **screen level** for §4's purposes — it may name `Route`. The
+  rule there is about components under `Components/`, not about this split.
 - **Folder per feature**, not per pattern. `CookingClassDetail/` holds the view, the view model and
   its route; there is no `Views/` or `ViewModels/` directory.
+
+### Folder layout
+
+```
+DapurNaura/
+├── App/                    # @main, config, and the composition root
+│   └── Navigation/         # Route, RouteDestination, DapurNauraAppRouter, ViewModelFactory
+├── Config/                 # xcconfig — target membership OFF, see CLAUDE.md
+├── Helper/                 # transitional; empties when DN-016 lands
+└── Presentation/
+    ├── Components/         # used by more than one feature
+    ├── DesignConstants.swift
+    └── <Feature>/          # one folder per screen
+        ├── <Feature>View.swift
+        ├── <Feature>ViewModel.swift
+        ├── <Destination>Route.swift
+        └── Components/     # used by this feature only
+```
+
+- **A component folder is named `Components/` at both scopes**, and the two are told apart by
+  *where they sit*, not by what they are called. **Do not introduce atomic-design tiers**
+  (`Atom/`, `Molecule/`, `Organism/`). "Which folder does this go in" must have a factual answer —
+  how many features use it — rather than a judgement call about whether a row is an atom or a
+  molecule. Tiers earn their keep in a design system with many consumers; this is one app, one
+  target.
+- **A component moves up to `Presentation/Components/` on its second consumer**, not in
+  anticipation of one.
+- **File name must equal the type name.** SwiftLint's `file_name` rule is not enabled — this one is
+  on review, and three files had drifted before DN-015.
+- **No junk-drawer folder.** `Helper/` exists only until DN-016 moves `Rupiah.swift` and
+  `DNError+Message.swift` into DNLibrary; nothing new goes in it. A folder named for what its
+  contents are *not* attracts everything nobody classified.
 - `#Preview`, never `PreviewProvider`.
 - Business logic must not sit inline in `task()`, `onAppear()` or a button action. Call a ViewModel
   method.
@@ -77,7 +127,7 @@ final class CookingClassListViewModel {
 **One registration, value-based links, per-feature route enums.**
 
 ```swift
-// CookingClassList/ClassRoute.swift — the feature owns its own routes
+// CookingClassDetail/ClassRoute.swift — owned by the feature it opens
 enum ClassRoute: Hashable {
     case detail(id: String)
 }
@@ -100,6 +150,19 @@ enum Route: Hashable {
   state restoration; a path of SKIE-bridged Kotlin objects is neither.
 - **Route enums are split per feature**, each in its feature folder, wrapped by the thin top-level
   `Route`. The wrapper keeps the path homogeneous — `[Route]` stays inspectable and encodable.
+- **A route is owned by the feature it navigates *into*, not the one it is pushed from.**
+  `ClassRoute` lives in `CookingClassDetail/`, `RecipeRoute` in `RecipeDetail/`. Source-ownership
+  survives only while each screen has exactly one entry point; the second screen to push a recipe
+  would otherwise have to import the class-detail feature's vocabulary to do it.
+- **Nothing below screen level may name `Route`. Must.** A row, badge or section takes data and —
+  where it is tappable — a closure. The screen-level view is the lowest place a `Route` may appear.
+  This is the rule; `NavigationLink` vs router is a mechanism choice underneath it.
+  `RecipeLink` violated it and was deleted in DN-015.
+- **Inside a `List`, prefer `NavigationLink(value:)` at that screen level.** It is already hoisted —
+  the child declares an intent, the parent's `navigationDestination` resolves it — and it keeps the
+  disclosure chevron, row press states and selection behaviour that SwiftUI gives free. Reach for
+  the router when there is no link to attach: presentation following async work, or a jump that is
+  not a tap.
 - **Drop the wrapper only when features become separate Swift packages**, at which point each package
   registers its own destination and the path becomes `NavigationPath`. **Not** when the enum "gets
   long." Screen count is not the trigger; module boundaries are.
@@ -114,15 +177,56 @@ to force `AnyView`.
 ```swift
 @MainActor
 @Observable
-final class AppRouter {
+final class DapurNauraAppRouter {
     var path: [Route] = []
 }
 ```
 
-Held as `@State` at the root, injected with `.environment(router)`. A **View** may push. A
-**ViewModel must not** — it has no business knowing screens exist. Where navigation must follow async
-work, the View observes the ViewModel's state and pushes; the ViewModel does not reach for the
-router.
+Held as `@State` on `DapurNauraApp`, injected with `.environment(router)`, and bound by the root
+stack as `NavigationStack(path: $router.path)`. A **View** may push. A **ViewModel must not** — it
+has no business knowing screens exist. Where navigation must follow async work, the View observes
+the ViewModel's state and pushes; the ViewModel does not reach for the router.
+
+**The router is the array and nothing else.** `NavigationLink(value:)` appends and the back button
+removes, so `push(_:)` and `popToRoot()` would have no callers — and a convenience method nothing
+calls is worse than none, because the next screen copies it. Add one when a caller exists.
+
+**Be honest about what it earns today: nothing.** Navigation is driven by `NavigationLink(value:)`,
+and only `NavigationStack` reads `path`. The router is here because deep links, state restoration and
+pop-to-root after a completed payment all need an owned path, and retrofitting one across five
+screens costs more than carrying it across two. That is a deliberate bet on work that is scheduled,
+not an abstraction earning its keep now. **Do not cite it as precedent for adding other structure
+ahead of need.**
+
+**`.navigationDestination` must apply `.id(route)`. Must.**
+
+```swift
+.navigationDestination(for: Route.self) { route in
+    RouteDestination(route: route, factory: factory)
+        .id(route)
+}
+```
+
+Without it, SwiftUI identifies a destination by its **position** in the path. Replace the route at a
+given depth — "next recipe", a deep link landing on a different class — and the view at that position
+keeps its `@State`, so the previous screen's ViewModel survives and the user sees the old class. The
+screens inject their ViewModel through `init` into `@State`, and **`State(initialValue:)` is used only
+on first render**; every later pass builds a ViewModel and discards it. `.id(route)` is what makes
+that discard harmless instead of a stale screen.
+
+The discarded allocation is accepted: a ViewModel here stores two references and nothing more.
+**Do not "fix" it by making the ViewModel optional and building it in `.task`** — that trades a cheap
+allocation for an optional unwrap in every body and a loading state that means two different things.
+
+**Any `#Preview` of a view that reads the router must inject one** — `@Environment(DapurNauraAppRouter.self)`
+is non-optional and traps when absent:
+
+```swift
+#Preview { CookingClassListView(...).environment(DapurNauraAppRouter()) }
+```
+
+Previewing the `Content` view instead avoids this entirely, which is the other reason §3 wants the
+split.
 
 **Sheets and alerts are not routes.** They are local presentation state and stay as `@State` on the
 view that triggers them.
@@ -306,10 +410,22 @@ Found by review on 2026-08-06, when this document was written against code that 
 | §7 | Both ViewModels had an empty `catch` that could strand a screen on a permanent spinner | ✅ DN-015 |
 | §3 | `CookingClassListView.swift` and `CookingClassDetailView.swift` each contained two types | ✅ DN-015 |
 | §3 | `CookingClassDetailView` used four `@ViewBuilder` helpers instead of extracted structs | ✅ DN-015 |
+| §3 | The state switch stayed a `@ViewBuilder` property on all three screens, so no state was previewable — the app had **zero** `#Preview` | ✅ DN-015 for the two real screens; `RecipePlaceholderView` left, see below |
 | §5 | Screens were wired with per-screen closures rather than a `ViewModelFactory` | ✅ DN-015 |
 | §9 | Spacing, corner radii and `.caption2` appeared as literals across three files | ✅ DN-015 |
+| §3 | `Atom/` folders held an atom, two molecules and an organism, duplicating `Components/` at a different scope | ✅ DN-015 |
+| §3 | Three files whose names did not match the type inside them (`AppConfig`, and both route enums) | ✅ DN-015 |
+| §4 | Route enums sat with the screen that pushed them rather than the screen they open | ✅ DN-015 |
+| §4 | `RecipeLink`, a feature component, named `Route` and chose the destination | ✅ DN-015 |
+| §4 | No router existed — the stack used SwiftUI's implicit path, though this document specified one | ✅ DN-015 |
 | §10 | `Rupiah.swift` and `DNError+Message.swift` format in Swift; both must move to DNLibrary | ⏳ **DN-016** |
 
 `swiftlint lint` reports **1 violation, 0 serious** — the `NumberFormatter` in `Rupiah.swift`, which
 is the §10 row above and moves in DN-016. It is deliberately left failing so the linter keeps naming
 the one rule this codebase still breaks.
+
+**`RecipePlaceholderView` is knowingly exempt from §3's state-alone rule.** It still holds its state
+switch as a `@ViewBuilder` property with the loaded layout inline. The file is marked temporary and
+is replaced wholesale by the recipe-detail screen, so extracting it would be tidying code that has a
+deletion date. **This exemption dies with the file** — the real recipe screen complies like the other
+two.
