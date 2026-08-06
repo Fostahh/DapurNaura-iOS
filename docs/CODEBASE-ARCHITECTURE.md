@@ -295,22 +295,21 @@ and not `ios/SPMDNLibrary`, which is a single manifest file.
 
 ## Known violations
 
-The current code does not yet comply. These are real, found by review on 2026-08-06, and each needs
-its own ticket — **DN-014 wrote these rules; it did not apply them.**
+Found by review on 2026-08-06, when this document was written against code that predated it.
+**DN-014 wrote these rules; DN-015 applied them.**
 
-| Rule | Violation |
-|---|---|
-| §4 | `CookingClassListView` registers `navigationDestination` inside the `.loaded` branch — it deregisters on retry |
-| §4 | `CookingClassDetailView` pushes recipes with a closure-based `NavigationLink`, mixed with the list's value-based one |
-| §4 | Routes are registered `for: String.self` — a universal type, not a route type |
-| §7 | Both ViewModels have an empty `catch` that can strand a screen on a permanent spinner |
-| §10 | `Rupiah.swift` and `DNError+Message.swift` format in Swift; both must move to DNLibrary |
-| §3 | `CookingClassListView.swift` and `CookingClassDetailView.swift` each contain two types |
-| §3 | `CookingClassDetailView` uses four `@ViewBuilder` helpers instead of extracted structs |
-| §5 | Screens are wired with per-screen closures rather than a `ViewModelFactory` |
-| §9 | Spacing, corner radii and `.caption2` appear as literals across three files |
+| Rule | Violation | Status |
+|---|---|---|
+| §4 | `CookingClassListView` registered `navigationDestination` inside the `.loaded` branch — it deregistered on retry | ✅ DN-015 |
+| §4 | `CookingClassDetailView` pushed recipes with a closure-based `NavigationLink`, mixed with the list's value-based one | ✅ DN-015 |
+| §4 | Routes were registered `for: String.self` — a universal type, not a route type | ✅ DN-015 |
+| §7 | Both ViewModels had an empty `catch` that could strand a screen on a permanent spinner | ✅ DN-015 |
+| §3 | `CookingClassListView.swift` and `CookingClassDetailView.swift` each contained two types | ✅ DN-015 |
+| §3 | `CookingClassDetailView` used four `@ViewBuilder` helpers instead of extracted structs | ✅ DN-015 |
+| §5 | Screens were wired with per-screen closures rather than a `ViewModelFactory` | ✅ DN-015 |
+| §9 | Spacing, corner radii and `.caption2` appeared as literals across three files | ✅ DN-015 |
+| §10 | `Rupiah.swift` and `DNError+Message.swift` format in Swift; both must move to DNLibrary | ⏳ **DN-016** |
 
-SwiftLint currently reports 5 of these: the closure-based `NavigationLink` (error), the
-`NumberFormatter` in `Rupiah.swift`, trailing whitespace, a vertical-whitespace violation, and
-`static_over_final_class` in the UI-test scaffolding. **DN-015** fixes the behavioural ones,
-**DN-016** moves the formatters.
+`swiftlint lint` reports **1 violation, 0 serious** — the `NumberFormatter` in `Rupiah.swift`, which
+is the §10 row above and moves in DN-016. It is deliberately left failing so the linter keeps naming
+the one rule this codebase still breaks.

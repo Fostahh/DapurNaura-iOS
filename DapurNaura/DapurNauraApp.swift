@@ -16,20 +16,15 @@ struct DapurNauraApp: App {
     //   DNDataLayer(config: DNNetworkManagerConfig(baseUrl: AppConfig.baseURL,
     //                                              apiKey: AppConfig.apiKey))
     // — and replace the stale API_BASE_URL values in Config/*.xcconfig first.
-    private let dataLayer = DNDataLayer.companion.stub()
+    //
+    // This is the only place that knows a DNDataLayer exists (ARCHITECTURE §5).
+    private let factory = ViewModelFactory(dataLayer: DNDataLayer.companion.stub())
 
     var body: some Scene {
         WindowGroup {
             CookingClassListView(
-                viewModel: CookingClassListViewModel(
-                    getCookingClasses: dataLayer.getCookingClasses
-                ),
-                makeDetailViewModel: { classId in
-                    CookingClassDetailViewModel(
-                        classId: classId,
-                        getCookingClassDetail: dataLayer.getCookingClassDetail
-                    )
-                }
+                viewModel: factory.makeCookingClassList(),
+                factory: factory
             )
         }
     }

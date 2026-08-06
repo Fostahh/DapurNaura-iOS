@@ -13,40 +13,57 @@ import SwiftUI
 import DNLibrary
 
 struct RecipePlaceholderView: View {
-    let recipe: RecipeSummary
+    @State private var viewModel: RecipePlaceholderViewModel
+
+    init(viewModel: RecipePlaceholderViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
 
     var body: some View {
-        VStack(spacing: 16) {
-            AsyncImage(url: URL(string: recipe.imageUrl)) { image in
-                image.resizable().aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Rectangle().fill(.quaternary)
-            }
-            .frame(height: 180)
-            .frame(maxWidth: .infinity)
-            .clipped()
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+        content
+            .navigationBarTitleDisplayMode(.inline)
+            .task { await viewModel.load() }
+    }
 
-            Text(recipe.name)
-                .font(.title3.bold())
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .loading:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            if let portions = recipe.portions {
-                Text("Porsi: \(portions)")
-                    .foregroundStyle(.secondary)
-            }
-            if let loyang = recipe.loyang {
-                Text("Loyang: \(loyang)")
-                    .foregroundStyle(.secondary)
+        case .failed(let message):
+            LoadFailedView(message: message) {
+                Task { await viewModel.load() }
             }
 
-            Text("Halaman resep belum dibuat.")
-                .font(.footnote)
-                .foregroundStyle(.tertiary)
+        case .loaded(let recipe):
+            VStack(spacing: DesignConstants.sectionSpacing) {
+                RemoteImage(urlString: recipe.imageUrl, showsProgress: false)
+                    .frame(height: DesignConstants.detailImageHeight)
+                    .frame(maxWidth: .infinity)
+                    .clipShape(.rect(cornerRadius: DesignConstants.cornerRadius))
 
-            Spacer()
+                Text(recipe.name)
+                    .font(.title3.bold())
+
+                if let portions = recipe.portions {
+                    Text("Porsi: \(portions)")
+                        .foregroundStyle(.secondary)
+                }
+                if let loyang = recipe.loyang {
+                    Text("Loyang: \(loyang)")
+                        .foregroundStyle(.secondary)
+                }
+
+                Text("Halaman resep belum dibuat.")
+                    .font(.footnote)
+                    .foregroundStyle(.tertiary)
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle(recipe.name)
         }
-        .padding()
-        .navigationTitle(recipe.name)
-        .navigationBarTitleDisplayMode(.inline)
     }
 }

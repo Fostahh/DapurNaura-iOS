@@ -11,22 +11,24 @@ import DNLibrary
 struct CookingClassListView: View {
     @State private var viewModel: CookingClassListViewModel
 
-    // DN-012: the detail screen needs its own use case, and composition stays at the
-    // app root — so the root hands down a factory rather than the data layer itself.
-    private let makeDetailViewModel: (String) -> CookingClassDetailViewModel
+    private let factory: ViewModelFactory
 
-    init(
-        viewModel: CookingClassListViewModel,
-        makeDetailViewModel: @escaping (String) -> CookingClassDetailViewModel
-    ) {
+    init(viewModel: CookingClassListViewModel, factory: ViewModelFactory) {
         _viewModel = State(initialValue: viewModel)
-        self.makeDetailViewModel = makeDetailViewModel
+        self.factory = factory
     }
 
     var body: some View {
         NavigationStack {
             content
                 .navigationTitle("Kelas Masak")
+                // DN-015: the single registration in the app, attached to content
+                // that always renders. It previously sat inside `case .loaded`,
+                // so tapping Coba Lagi deregistered it and tore down any pushed
+                // screen. Never move this inside the state switch.
+                .navigationDestination(for: Route.self) { route in
+                    RouteDestination(route: route, factory: factory)
+                }
         }
         .task { await viewModel.load() }
     }
@@ -39,83 +41,17 @@ struct CookingClassListView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
         case .failed(let message):
-            ContentUnavailableView {
-                Label("Gagal Memuat", systemImage: "wifi.exclamationmark")
-            } description: {
-                Text(message)
-            } actions: {
-                Button("Coba Lagi") {
-                    Task { await viewModel.load() }
-                }
-                .buttonStyle(.borderedProminent)
+            LoadFailedView(message: message) {
+                Task { await viewModel.load() }
             }
 
         case .loaded(let classes):
             List(classes, id: \.id) { cookingClass in
-                NavigationLink(value: cookingClass.id) {
+                NavigationLink(value: Route.classes(.detail(classId: cookingClass.id))) {
                     CookingClassRow(cookingClass: cookingClass)
                 }
             }
-            .listStyle(.plain)  
-            .navigationDestination(for: String.self) { classId in
-                CookingClassDetailView(viewModel: makeDetailViewModel(classId))
-            }
+            .listStyle(.plain)
         }
-    }
-}
-
-private struct CookingClassRow: View {
-    let cookingClass: CookingClass
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            AsyncImage(url: URL(string: cookingClass.imageUrl)) { image in
-                image.resizable().aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Rectangle()
-                    .fill(.quaternary)
-                    .overlay { ProgressView() }
-            }
-            .frame(height: 160)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-
-            HStack(alignment: .firstTextBaseline) {
-                Text(cookingClass.name)
-                    .font(.headline)
-                Spacer()
-                statusBadge
-            }
-
-            Text(cookingClass.description_)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .lineLimit(2)
-
-            HStack {
-                Text(rupiah(cookingClass.price))
-                    .font(.subheadline.bold())
-                Spacer()
-                Text("\(cookingClass.recipeCount) resep")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.vertical, 8)
-    }
-
-    // purchaseStatus is a UI hint, never a gate — locked content never reaches
-    // the client in the first place (contract rule).
-    private var statusBadge: some View {
-        let (label, color): (String, Color) = switch cookingClass.purchaseStatus {
-        case .purchased: ("Sudah Dibeli", .green)
-        case .pendingVerification: ("Menunggu Verifikasi", .orange)
-        case .notPurchased: ("Belum Dibeli", .secondary)
-        }
-        return Text(label)
-            .font(.caption2.weight(.semibold))
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(color.opacity(0.15), in: Capsule())
-            .foregroundStyle(color)
     }
 }
