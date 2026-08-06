@@ -1,0 +1,131 @@
+# SwiftLint — DapurNaura iOS
+#
+# Established by DN-014 (2026-08-06).
+#
+# The rule set is chosen to match CODEBASE-ARCHITECTURE.md, not pulled in wholesale.
+# A rule that document does not justify is off. If you want to enable something,
+# say which section of the document it enforces — otherwise it is noise that
+# trains people to ignore the linter.
+#
+# Scope: this repository only. NOT DNLibrary (no Swift sources; its gate is
+# explicitApi() plus :sharedLogic:check) and NOT ios/SPMDNLibrary (one manifest file).
+
+included:
+  - DapurNaura
+  - DapurNauraTests
+  - DapurNauraUITests
+
+excluded:
+  - ${PWD}/.build
+  - DapurNaura/Config
+
+# ---------------------------------------------------------------------------
+# Disabled defaults — each with the reason, so nobody re-enables them blindly
+# ---------------------------------------------------------------------------
+disabled_rules:
+  # Content is Bahasa Indonesia and comments are English prose. Wrapping rules
+  # fight both, and the document says nothing about comment shape.
+  - todo
+
+  # The document deliberately prefers extracted View structs over long bodies,
+  # which this rule cannot distinguish from genuinely nested SwiftUI hierarchies.
+  # file_length and type_body_length below apply the same pressure more honestly.
+  - function_body_length
+
+  # SwiftUI view bodies legitimately nest deeply. §3 handles composition.
+  - closure_body_length
+
+# ---------------------------------------------------------------------------
+# Opt-in rules that match a section of the document
+# ---------------------------------------------------------------------------
+opt_in_rules:
+  - force_unwrapping          # general safety; prefer guard/if-let
+  - empty_count               # isEmpty reads better than count == 0
+  - explicit_init             # .init() noise
+  - first_where               # .first(where:) over .filter{}.first
+  - contains_over_first_not_nil
+  - last_where
+  - toggle_bool
+  - redundant_nil_coalescing
+  - closure_spacing
+  - operator_usage_whitespace
+  - vertical_whitespace_closing_braces
+  - overridden_super_call
+  - prohibited_super_call
+
+# Only run by `swiftlint analyze`, which needs a compiler log — not by `swiftlint lint`.
+analyzer_rules:
+  - unused_declaration
+  - unused_import
+
+# ---------------------------------------------------------------------------
+# Thresholds
+# ---------------------------------------------------------------------------
+
+# §3 — pressure toward extracted View structs rather than one long file.
+file_length:
+  warning: 200
+  error: 350
+
+type_body_length:
+  warning: 150
+  error: 250
+
+line_length:
+  warning: 120
+  error: 160
+  ignores_comments: true
+  ignores_urls: true
+
+identifier_name:
+  excluded:
+    - id
+    - to
+  allowed_symbols: ["_"]      # SKIE bridges Kotlin `description` as `description_`
+
+type_name:
+  min_length: 3
+
+force_try:
+  severity: error
+
+# ---------------------------------------------------------------------------
+# Custom rules — these enforce the document directly
+# ---------------------------------------------------------------------------
+custom_rules:
+
+  # §9 Design system — semantic fonts only.
+  no_system_font:
+    name: "Fixed font size"
+    regex: '\.system\(\s*size:'
+    message: "CODEBASE-ARCHITECTURE §9: use semantic fonts (.headline, .subheadline, .caption). A fixed size never scales with the user's text size."
+    severity: error
+
+  # §4 Navigation — value-based links only. The closure form and the value form
+  # cannot coexist in one NavigationStack; mixing them loses destinations.
+  no_navigation_link_closure:
+    name: "Closure-based NavigationLink"
+    regex: 'NavigationLink\s*\{'
+    message: "CODEBASE-ARCHITECTURE §4: use NavigationLink(value:) with the single navigationDestination. The closure form must not be mixed with value-based navigation."
+    severity: error
+
+  # §6 SKIE boundary — an exhaustive switch is the point of a sealed result.
+  no_default_in_onenum:
+    name: "default: in a sealed Kotlin switch"
+    regex: 'onEnum\(of:[^)]*\)[\s\S]{0,400}?default\s*:'
+    message: "CODEBASE-ARCHITECTURE §6: never write default: when switching a sealed Kotlin type. Exhaustiveness is what makes a new library error case fail compilation here."
+    severity: error
+
+  # NOTE — §2's "a ViewModel must not import SwiftUI" is deliberately NOT a custom
+  # rule. It needs "this file contains both X and Y", which regex expresses badly,
+  # and a rule that misfires trains people to ignore the linter. §2 is enforced by
+  # review. Do not add a fragile approximation of it here.
+
+  # §10 Where logic belongs — formatters are shared KMP functions now.
+  no_swift_number_formatter:
+    name: "NumberFormatter in the app"
+    regex: 'NumberFormatter\('
+    message: "CODEBASE-ARCHITECTURE §10: data-derived formatting lives in DNLibrary so Android shares it. Only view-context formatting stays in Swift."
+    severity: warning
+
+reporter: "xcode"
