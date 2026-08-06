@@ -37,7 +37,7 @@ struct PurchaseSection: View {
 
         case .notPurchased:
             Button(action: showPurchaseUnavailable) {
-                Text("Beli Kelas · \(rupiah(detail.price))")
+                Text("Beli Kelas · \(DNFormat.shared.rupiah(value: detail.price))")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)

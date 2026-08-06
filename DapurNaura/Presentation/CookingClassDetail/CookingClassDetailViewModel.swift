@@ -36,7 +36,7 @@ final class CookingClassDetailViewModel {
             case .success(let success):
                 state = .loaded(success.detail)
             case .failure(let failure):
-                state = .failed(failure.error.indonesianMessage)
+                state = .failed(DNErrorKt.userMessage(failure.error))
             }
         } catch is CancellationError {
             // The screen is going away; leave state untouched.
@@ -45,7 +45,7 @@ final class CookingClassDetailViewModel {
             // But `state` is already .loading by this point: swallowing the error
             // would strand the screen on a spinner with no retry, which is a worse
             // failure than an honest message.
-            state = .failed("Terjadi kesalahan. Silakan coba lagi.")
+            state = .failed(DNErrorKt.userMessage(DNErrorUnknown(message: nil)))
         }
     }
 }

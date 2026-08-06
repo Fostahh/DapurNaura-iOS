@@ -94,7 +94,6 @@ DapurNaura/
 ├── App/                    # @main, config, and the composition root
 │   └── Navigation/         # Route, RouteDestination, DapurNauraAppRouter, ViewModelFactory
 ├── Config/                 # xcconfig — target membership OFF, see CLAUDE.md
-├── Helper/                 # transitional; empties when DN-016 lands
 └── Presentation/
     ├── Components/         # used by more than one feature
     ├── DesignConstants.swift
@@ -115,9 +114,10 @@ DapurNaura/
   anticipation of one.
 - **File name must equal the type name.** SwiftLint's `file_name` rule is not enabled — this one is
   on review, and three files had drifted before DN-015.
-- **No junk-drawer folder.** `Helper/` exists only until DN-016 moves `Rupiah.swift` and
-  `DNError+Message.swift` into DNLibrary; nothing new goes in it. A folder named for what its
-  contents are *not* attracts everything nobody classified.
+- **No junk-drawer folder.** A folder named for what its contents are *not* — `Helper/`, `Utils/`,
+  `Misc/` — attracts everything nobody classified. `Helper/` existed here until DN-016 emptied it,
+  and is not to come back. Anything that would go in one either belongs to a feature, is shared and
+  belongs in `Presentation/Components/`, or is logic and belongs in DNLibrary (§10).
 - `#Preview`, never `PreviewProvider`.
 - Business logic must not sit inline in `task()`, `onAppear()` or a button action. Call a ViewModel
   method.
@@ -418,11 +418,15 @@ Found by review on 2026-08-06, when this document was written against code that 
 | §4 | Route enums sat with the screen that pushed them rather than the screen they open | ✅ DN-015 |
 | §4 | `RecipeLink`, a feature component, named `Route` and chose the destination | ✅ DN-015 |
 | §4 | No router existed — the stack used SwiftUI's implicit path, though this document specified one | ✅ DN-015 |
-| §10 | `Rupiah.swift` and `DNError+Message.swift` format in Swift; both must move to DNLibrary | ⏳ **DN-016** |
+| §10 | `Rupiah.swift` and `DNError+Message.swift` format in Swift; both must move to DNLibrary | ✅ DN-016 |
 
-`swiftlint lint` reports **1 violation, 0 serious** — the `NumberFormatter` in `Rupiah.swift`, which
-is the §10 row above and moves in DN-016. It is deliberately left failing so the linter keeps naming
-the one rule this codebase still breaks.
+**`swiftlint lint` reports 0 violations**, as of DN-016. Every row above is struck. Keep it that way:
+the value of a clean linter is that the next violation is visible the moment it appears, and a
+codebase that habitually reports "3 known ones" has no such signal.
+
+The custom rules stay even though nothing trips them — `no_swift_number_formatter` is what stops
+`Rupiah.swift` growing back in a new file next time somebody needs a price on screen, which is
+exactly how it appeared the first time.
 
 **`RecipePlaceholderView` is knowingly exempt from §3's state-alone rule.** It still holds its state
 switch as a `@ViewBuilder` property with the loaded layout inline. The file is marked temporary and
