@@ -7,7 +7,7 @@ raise a ticket to change the rule — do not silently diverge.
 Rules say **must**. Guidance says **should**.
 
 Sibling document:
-[`DNLibrary/docs/CODEBASE-STANDARD.md`](../../../DNLibrary/docs/CODEBASE-STANDARD.md), which governs
+[`DNLibrary/docs/CODEBASE-ARCHITECTURE.md`](../../../DNLibrary/docs/CODEBASE-ARCHITECTURE.md), which governs
 the data layer. Companion: [`../CLAUDE.md`](../CLAUDE.md), which covers build variants, secrets, the
 local package rule and known issues. **Nothing in those two files is repeated here.**
 
@@ -333,7 +333,7 @@ eventually read two different ways on two platforms.
 
 **Formatters are shared functions, not fields on domain models.** `CookingClass.price` stays a
 `Long`. Returning display strings from use cases would turn domain models into view models and
-contradict `DNLibrary/docs/CODEBASE-STANDARD.md` §2.
+contradict `DNLibrary/docs/CODEBASE-ARCHITECTURE.md` §2.
 
 **The boundary is the view.** Formatting derived only from data belongs in DNLibrary. Formatting that
 depends on **view context** — truncating to fit two lines, choosing a short label because a card is
@@ -385,10 +385,11 @@ precisely.
 
 **Running it.** `.swiftlint.yml` lives at the repo root; run `swiftlint lint` from there.
 
-Verified against SwiftLint 0.65.0 on 2026-08-06: 5 violations across 12 files, 1 of them an error.
-Every one is a *Known violation* below — the linter found nothing this document had not already
-predicted, which is the result you want on the first run. `unused_declaration` and `unused_import`
-are analyzer rules and need `swiftlint analyze` with a compiler log; plain `lint` skips them.
+Verified against SwiftLint 0.65.0. The first run, on 2026-08-06, reported 5 violations across 12
+files with 1 error — every one already a *Known violation* below, which is the result you want:
+the linter found nothing this document had not predicted. **DN-015 and DN-016 cleared all five, and
+it now reports 0.** `unused_declaration` and `unused_import` are analyzer rules needing
+`swiftlint analyze` with a compiler log; plain `lint` skips them.
 
 The run-script build phase is **not yet wired** into the Xcode project. Doing so means editing
 `project.pbxproj`, the file that carries the local-package reference that must never be committed —
