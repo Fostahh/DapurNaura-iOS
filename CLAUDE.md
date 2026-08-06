@@ -180,10 +180,14 @@ final commit that bumps to the new version after release. By design, not a bug t
    If `Missing package product 'DNLibrary'` appears, the cause is a product dependency without a
    matching package reference.
 
-2. **`IPHONEOS_DEPLOYMENT_TARGET` is 26.2 but the installed simulators run iOS 26.0**, so
-   `xcodebuild` offers no simulator destinations and building from the CLI needs
-   `IPHONEOS_DEPLOYMENT_TARGET=26.0` as an override. Either lower the target in the project or
-   update the simulator runtime — the owner decides.
+2. **`DNLibrary.xcframework` carries no x86_64 simulator slice** — it is built for `iosArm64` and
+   `iosSimulatorArm64` only. A build aimed at `-destination 'generic/platform=iOS Simulator'`
+   therefore fails on the x86_64 pass with *"is missing architecture(s) required by this target
+   (x86_64)"*, even though the arm64 pass compiles and links cleanly. **Name a concrete
+   Apple-silicon simulator** in `-destination` instead of the generic one.
+
+   *(The former known issue 2 — a 26.2 deployment target with no matching simulator runtime — is
+   gone: DN-013 lowered the target to 17.0, and an iOS 26.3 runtime was installed in the meantime.)*
 
 3. **This repo has no git remote yet**, so the push/PR half of the platform flow cannot run here.
    Commits stay local until a repo is created.
