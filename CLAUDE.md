@@ -6,6 +6,14 @@ This repo is one project inside the **Dapur Naura platform** workspace. The work
 process, autonomy rules and release flow are defined in the umbrella repo — read
 `../../CLAUDE.md` and `../../docs/ARCHITECTURE-AND-WORKFLOW.md` before starting a ticket.
 
+> **Source of truth.** For *what was asked for*, `../../docs/requirements/` wins — over the code, over any other
+> document, over a commit message. Where no requirement exists, **the ticket is the source of truth**
+> and its `## Rationale` carries the why.
+>
+> This governs **intent**, not facts. For *what the code does today*, believe the code. When intent
+> and implementation disagree, the implementation is what is wrong: record the correction in the
+> **ticket**, never by editing the requirement.
+
 ## What this app is
 
 A cooking app for **Dapur Naura**, digitalising the paid cooking classes the owner's family teaches.

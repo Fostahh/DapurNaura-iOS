@@ -16,6 +16,14 @@ local package rule and known issues. **Nothing in those two files is repeated he
 
 ---
 
+> **Source of truth.** For *what was asked for*, `../../../docs/requirements/` wins — over the code, over any other
+> document, over a commit message. Where no requirement exists, **the ticket is the source of truth**
+> and its `## Rationale` carries the why.
+>
+> This governs **intent**, not facts. For *what the code does today*, believe the code. When intent
+> and implementation disagree, the implementation is what is wrong: record the correction in the
+> **ticket**, never by editing the requirement.
+
 ## 1. Layering
 
 ```
@@ -256,7 +264,10 @@ DNLibrary is Kotlin. SKIE generates its Swift face, and that face has sharp edge
   when the library adds an error case, this app must stop compiling until it is handled. A `default:`
   throws that away silently.
 - **Kotlin nullability carries meaning — read the contract before treating a `nil` as "absent."**
-  `RecipeSummary.portions == nil` means the class is **locked**, not that the recipe has no portions.
+  `RecipeSummary.portions == nil` means **no value**, and nothing more. **It is not a lock signal**
+  — whether the class is locked is answered by `purchaseStatus` on the same response, and only by
+  that. Owner's decision, 2026-08-07: a locked class omits portions, but so does a bought recipe
+  whose portions the owner has not supplied, so the field cannot carry both meanings.
   The server omits the field entirely for unpurchased classes. Coalescing it to `""` destroys
   information the UI needs.
 - `portions` and `loyang` are separate concepts and **must never be merged** into one string.
