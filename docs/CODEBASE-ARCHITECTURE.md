@@ -422,7 +422,7 @@ Found by review on 2026-08-06, when this document was written against code that 
 | §7 | Both ViewModels had an empty `catch` that could strand a screen on a permanent spinner | ✅ DN-015 |
 | §3 | `CookingClassListView.swift` and `CookingClassDetailView.swift` each contained two types | ✅ DN-015 |
 | §3 | `CookingClassDetailView` used four `@ViewBuilder` helpers instead of extracted structs | ✅ DN-015 |
-| §3 | The state switch stayed a `@ViewBuilder` property on all three screens, so no state was previewable — the app had **zero** `#Preview` | ✅ DN-015 for the two real screens; `RecipePlaceholderView` left, see below |
+| §3 | The state switch stayed a `@ViewBuilder` property on all three screens, so no state was previewable — the app had **zero** `#Preview` | ✅ DN-015 for the two real screens, ✅ DN-021 for the third |
 | §5 | Screens were wired with per-screen closures rather than a `ViewModelFactory` | ✅ DN-015 |
 | §9 | Spacing, corner radii and `.caption2` appeared as literals across three files | ✅ DN-015 |
 | §3 | `Atom/` folders held an atom, two molecules and an organism, duplicating `Components/` at a different scope | ✅ DN-015 |
@@ -440,8 +440,7 @@ The custom rules stay even though nothing trips them — `no_swift_number_format
 `Rupiah.swift` growing back in a new file next time somebody needs a price on screen, which is
 exactly how it appeared the first time.
 
-**`RecipePlaceholderView` is knowingly exempt from §3's state-alone rule.** It still holds its state
-switch as a `@ViewBuilder` property with the loaded layout inline. The file is marked temporary and
-is replaced wholesale by the recipe-detail screen, so extracting it would be tidying code that has a
-deletion date. **This exemption dies with the file** — the real recipe screen complies like the other
-two.
+**Every row above is now struck.** The last standing exemption — `RecipePlaceholderView`, which kept
+its state switch as a `@ViewBuilder` property because the file was temporary — **died with the file**
+when DN-021 replaced it with the real recipe screen. That is how a scoped exemption is supposed to
+end: not renewed, not forgotten, but removed along with the thing it excused.

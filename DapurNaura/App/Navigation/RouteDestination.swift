@@ -22,10 +22,11 @@ struct RouteDestination: View {
                 viewModel: factory.makeCookingClassDetail(classId: classId)
             )
 
-        case .recipes(.detail(let classId, let recipeId)):
-            RecipePlaceholderView(
-                viewModel: factory.makeRecipePlaceholder(classId: classId, recipeId: recipeId)
-            )
+        case .recipes(.detail(_, let recipeId)):
+            // DN-021: the recipe is fetched by its own id. classId still travels in the route
+            // because a recipe is only reachable through the class that teaches it, and a deep
+            // link has to be able to prove that path.
+            RecipeDetailView(viewModel: factory.makeRecipeDetail(recipeId: recipeId))
         }
     }
 }
