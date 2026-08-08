@@ -23,7 +23,13 @@ struct DapurNauraApp: App {
             CookingClassListView(
                 viewModel: CookingClassListViewModel(
                     getCookingClasses: dataLayer.getCookingClasses
-                )
+                ),
+                makeDetailViewModel: { classId in
+                    CookingClassDetailViewModel(
+                        classId: classId,
+                        getCookingClassDetail: dataLayer.getCookingClassDetail
+                    )
+                }
             )
         }
     }

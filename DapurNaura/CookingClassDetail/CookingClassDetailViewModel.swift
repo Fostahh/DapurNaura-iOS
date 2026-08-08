@@ -1,8 +1,8 @@
 //
-//  CookingClassListViewModel.swift
+//  CookingClassDetailViewModel.swift
 //  DapurNaura
 //
-//  DN-009 — MVVM: the view renders `state`, and nothing here imports SwiftUI.
+//  DN-012 — MVVM: the view renders `state`, and nothing here imports SwiftUI.
 //
 
 import Foundation
@@ -10,29 +10,31 @@ import DNLibrary
 
 @MainActor
 @Observable
-final class CookingClassListViewModel {
+final class CookingClassDetailViewModel {
 
     enum State {
         case loading
-        case loaded([CookingClass])
+        case loaded(CookingClassDetail)
         case failed(String)
     }
 
     private(set) var state: State = .loading
 
-    private let getCookingClasses: GetCookingClassesUseCase
+    private let classId: String
+    private let getCookingClassDetail: GetCookingClassDetailUseCase
 
-    init(getCookingClasses: GetCookingClassesUseCase) {
-        self.getCookingClasses = getCookingClasses
+    init(classId: String, getCookingClassDetail: GetCookingClassDetailUseCase) {
+        self.classId = classId
+        self.getCookingClassDetail = getCookingClassDetail
     }
 
     func load() async {
         state = .loading
         do {
-            let result = try await getCookingClasses.invoke()
+            let result = try await getCookingClassDetail.invoke(classId: classId)
             switch onEnum(of: result) {
             case .success(let success):
-                state = .loaded(success.classes)
+                state = .loaded(success.detail)
             case .failure(let failure):
                 state = .failed(failure.error.indonesianMessage)
             }

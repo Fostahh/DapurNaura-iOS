@@ -11,8 +11,16 @@ import DNLibrary
 struct CookingClassListView: View {
     @State private var viewModel: CookingClassListViewModel
 
-    init(viewModel: CookingClassListViewModel) {
+    // DN-012: the detail screen needs its own use case, and composition stays at the
+    // app root — so the root hands down a factory rather than the data layer itself.
+    private let makeDetailViewModel: (String) -> CookingClassDetailViewModel
+
+    init(
+        viewModel: CookingClassListViewModel,
+        makeDetailViewModel: @escaping (String) -> CookingClassDetailViewModel
+    ) {
         _viewModel = State(initialValue: viewModel)
+        self.makeDetailViewModel = makeDetailViewModel
     }
 
     var body: some View {
@@ -44,9 +52,14 @@ struct CookingClassListView: View {
 
         case .loaded(let classes):
             List(classes, id: \.id) { cookingClass in
-                CookingClassRow(cookingClass: cookingClass)
+                NavigationLink(value: cookingClass.id) {
+                    CookingClassRow(cookingClass: cookingClass)
+                }
             }
-            .listStyle(.plain)
+            .listStyle(.plain)  
+            .navigationDestination(for: String.self) { classId in
+                CookingClassDetailView(viewModel: makeDetailViewModel(classId))
+            }
         }
     }
 }
@@ -104,13 +117,5 @@ private struct CookingClassRow: View {
             .padding(.vertical, 4)
             .background(color.opacity(0.15), in: Capsule())
             .foregroundStyle(color)
-    }
-
-    private func rupiah(_ value: Int64) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.groupingSeparator = "."
-        let grouped = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
-        return "Rp\(grouped)"
     }
 }
