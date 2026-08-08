@@ -10,6 +10,14 @@ no localisation planned.
 > One repository in the [Dapur Naura platform](https://github.com/Fostahh/DapurNaura-Platform)
 > workspace, which is **not** a monorepo. Workflow, tickets and the release flow are defined there.
 
+> **Source of truth.** For *what was asked for*, `../../docs/requirements/` wins — over the code, over any other
+> document, over a commit message. Where no requirement exists, **the ticket is the source of truth**
+> and its `## Rationale` carries the why.
+>
+> This governs **intent**, not facts. For *what the code does today*, believe the code. When intent
+> and implementation disagree, the implementation is what is wrong: record the correction in the
+> **ticket**, never by editing the requirement.
+
 ## Features
 
 What runs today, against stub data:
