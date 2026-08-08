@@ -13,20 +13,26 @@ Browse **cooking classes** (*kelas*) → open one to see its **recipes** → ope
 ingredients (*bahan-bahan*), the step-by-step method, and a how-to video. Content is Bahasa
 Indonesia. Audience is people learning to cook.
 
-**None of that is built yet.** The app is the stock Xcode template plus the build-variant plumbing,
-with **no data layer at all** and no UI design. Everything except `AppConfig` and the xcconfig
-system is scaffolding to be replaced.
+**The first screen exists (DN-009):** the cooking-class list — SwiftUI + MVVM in
+`DapurNaura/CookingClassList/`, fed by `DNLibrary`'s `DNDataLayer.stub()` (contract replay; no
+backend exists yet). Everything else — class detail, recipes, video, payment — is still to build.
 
 ## Project shape
 
-SwiftUI, an Xcode project (not an SPM package). Three source files today:
+SwiftUI, an Xcode project (not an SPM package). Source today:
 
-- **`DapurNaura/DapurNauraApp.swift`** — `@main` entry point. Back to the stock template: it shows
-  `ContentView` and nothing else. It no longer initialises `DNNetworkManager`.
-- **`DapurNaura/ContentView.swift`** — the stock template "Hello, world!" view.
+- **`DapurNaura/DapurNauraApp.swift`** — `@main` entry point and the **composition root**: builds
+  `DNDataLayer.stub()` and hands its use case to the ViewModel. Swapping stub → live
+  `DNDataLayer(config:)` happens here, and only here, when a backend exists.
+- **`DapurNaura/CookingClassList/`** — the DN-009 screen. `CookingClassListViewModel`
+  (`@Observable`, `@MainActor`, no SwiftUI import — state machine `loading/loaded/failed`) and
+  `CookingClassListView` (renders state; Bahasa Indonesia strings; `purchaseStatus` badge is a UI
+  hint, never a gate). **Follow this MVVM shape for every next screen.**
+- **`DapurNaura/ContentView.swift`** — stock template leftover, no longer shown.
 - **`DapurNaura/AppConfig.swift`** — reads build-variant values out of `Info.plist`, see
-  [Build variants](#build-variants). **Nothing calls it yet**, so its fail-loud guard is currently
-  unexercised — the first caller is also the first real test of it.
+  [Build variants](#build-variants). **Still uncalled** — the stub path needs no URL or key. Its
+  first caller is the live-backend switch, which must also replace the stale RAWG `API_BASE_URL`
+  in the xcconfigs.
 
 Tests: `DapurNauraTests/` (Swift Testing, `@Test` / `#expect`) and `DapurNauraUITests/` (XCTest).
 Both are empty scaffolding.
@@ -123,24 +129,19 @@ the target's `membershipExceptions` (Xcode: File Inspector → untick Target Mem
 missed once and shipped all seven xcconfigs, `Secrets.xcconfig` included, inside the bundle —
 **adding a file to `Config/` means unticking its target membership.**
 
-## Data layer — planned, not wired
+## Data layer — wired locally (DN-009); no published version yet
 
-**This is a standalone SwiftUI app.** It has no data layer: no package dependency, no networking,
-and nothing imports DNLibrary. That wiring was removed deliberately — treat this repo as a new
-SwiftUI project.
+The app consumes **DNLibrary** (KMP, built in `../../DNLibrary`) as a binary. Since DN-009 the
+working tree points at the **local package** `../DNLibraryLocal`; that wiring lives only in the
+uncommitted `project.pbxproj` diff. The **committed** state has no package dependency at all and
+therefore does not compile — expected under the local package rule, and it stays that way until
+the first `publish-spm.sh publish` produces a remote version to pin.
 
-**Do not add DNLibrary imports, package references or product dependencies until a ticket asks for
-it.** If you need data for UI work, use local mock data in Swift.
+Swift-side bridging notes (SKIE): Kotlin `description` surfaces as `description_`; sealed results
+switch exhaustively via `onEnum(of:)`; the suspend use case is `try await useCase.invoke()`;
+companion functions read `DNDataLayer.companion.stub()`.
 
-Everything below is **context for later**, not a description of the code:
-
-The data/networking layer will not be native Swift. It will come from **DNLibrary**, a Kotlin
-Multiplatform library built in `../../DNLibrary`, delivered as a binary XCFramework and consumed
-through the `SPMDNLibrary` Swift package. When it changes, it changes there — not here.
-
-### The rules that switch on when it is wired
-
-They are inert today. Read them before the ticket that reinstates the dependency, not before.
+### The rules below are ACTIVE
 
 | | Where | Committed? |
 |---|---|---|
@@ -173,23 +174,20 @@ final commit that bumps to the new version after release. By design, not a bug t
 
 ## Known issues in this repo
 
-1. **There is no DNLibrary dependency.** `packageReferences` and every
-   `packageProductDependencies` list are empty, and the old orphan product dependencies and
-   Frameworks entries are gone. The project builds clean in this state — it simply has no data
-   layer.
+1. **The committed state does not compile** — the Swift code imports DNLibrary but the committed
+   `project.pbxproj` names no package dependency. Expected (local package rule) until the first
+   published SPMDNLibrary version is pinned in a final commit, together with `Package.resolved`.
+   If `Missing package product 'DNLibrary'` appears, the cause is a product dependency without a
+   matching package reference.
 
-   Re-adding it is the first step of the next data-layer ticket: **Add Local** →
-   `../DNLibraryLocal` for development (never committed), or a published SPMDNLibrary version once
-   one matches the app's code. Before that existed, this project failed with
-   `Missing package product 'DNLibrary'`; if that error returns, the cause is a product dependency
-   without a matching package reference.
-
-2. **No `Package.resolved` exists**, because there is no package dependency to resolve. It comes
-   back with the remote dependency, and must be committed once it does.
+2. **`IPHONEOS_DEPLOYMENT_TARGET` is 26.2 but the installed simulators run iOS 26.0**, so
+   `xcodebuild` offers no simulator destinations and building from the CLI needs
+   `IPHONEOS_DEPLOYMENT_TARGET=26.0` as an override. Either lower the target in the project or
+   update the simulator runtime — the owner decides.
 
 3. **This repo has no git remote yet**, so the push/PR half of the platform flow cannot run here.
    Commits stay local until a repo is created.
 
-4. **Nothing consumes `AppConfig`.** The variant plumbing is verified end to end (xcconfig →
-   Info.plist → built bundle), but no Swift code reads it yet, so a regression in it would be
-   silent. The first caller should be the code that reinstates `DNNetworkManager.initialize`.
+4. **Nothing consumes `AppConfig`.** The variant plumbing is verified end to end, but the stub
+   data path needs no URL or key, so `AppConfig` stays uncalled until the live-backend switch —
+   a regression in it would currently be silent.
