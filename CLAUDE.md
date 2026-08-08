@@ -21,10 +21,14 @@ Browse **cooking classes** (*kelas*) → open one to see its **recipes** → ope
 ingredients (*bahan-bahan*), the step-by-step method, and a how-to video. Content is Bahasa
 Indonesia. Audience is people learning to cook.
 
-**Two screens exist:** the cooking-class list (DN-009) and the class detail (DN-012), both fed by
-`DNLibrary`'s `DNDataLayer.stub()` (contract replay; no backend exists yet). The recipe screen is a
-placeholder. Everything else — the real recipe screen, video, payment, any notion of a signed-in
-user — is still to build.
+**Three screens exist:** the cooking-class list (DN-009, with a category filter added by DN-025), the
+class detail (DN-012) and the recipe screen (DN-021 — ~~a placeholder~~ replaced with the real thing),
+all fed by `DNLibrary`'s `DNDataLayer.stub()` (contract replay; no backend exists yet). Everything
+else — video, payment, any notion of a signed-in user — is still to build.
+
+**The class list filters by category on the server.** Choosing a chip is a new
+`getCookingClasses(category:)` request, not a predicate over the list already on screen, so the chip
+row lives outside the state switch and stays tappable while the list below reloads.
 
 ## Project shape
 
@@ -195,14 +199,26 @@ final commit that bumps to the new version after release. By design, not a bug t
    (x86_64)"*, even though the arm64 pass compiles and links cleanly. **Name a concrete
    Apple-silicon simulator** in `-destination` instead of the generic one.
 
+   **A simulator *name* is not enough** (DN-025). The iOS 18.3.1 runtimes publish several devices as
+   both `arch:arm64` and `arch:x86_64`, so `name=iPhone 16 Pro` is ambiguous and `xcodebuild` answers
+   by printing the entire device list instead of building. **Pass the simulator's id**
+   (`xcrun simctl list devices available`), or pick a device that only exists on an arm64-only
+   runtime.
+
    *(The former known issue 2 — a 26.2 deployment target with no matching simulator runtime — is
    gone: DN-013 lowered the target to 17.0, and an iOS 26.3 runtime was installed in the meantime.)*
 
-3. **Nothing is merged.** The remote is `github.com/Fostahh/DapurNaura-iOS`, and the ticket branches
-   are stacked on each other rather than on `main` — `DN-003 → DN-009 → DN-013 → DN-012 → DN-014 →
-   DN-015`. Merge their PRs in that order. On `main` the app is still a SwiftUI shell with build
-   variants and no data layer.
+3. ~~**Nothing is merged.**~~ **Resolved 2026-08-08** — every ticket branch through DN-021 is merged
+   into `development`, and the app pins SPMDNLibrary `0.5.0`. The remote is
+   `github.com/Fostahh/DapurNaura-iOS`; `main` stays frozen until `1.0.0`.
 
 4. **Nothing consumes `DapurNauraAppConfig`.** The variant plumbing is verified end to end, but the stub
    data path needs no URL or key, so `DapurNauraAppConfig` stays uncalled until the live-backend switch —
    a regression in it would currently be silent.
+
+5. **Switching to the local package can leave a stale SPM artifact that a rebuild does not clear**
+   (DN-025). The symptom is a *missing symbol* rather than a cache error — `cannot find type 'X' in
+   scope` for the newly added library type, while every other DNLibrary type in the same file
+   resolves, and with the new symbol demonstrably present in the framework under `Build/Products`.
+   Fix: `xcodebuild … clean` **and** delete
+   `~/Library/Developer/Xcode/DerivedData/DapurNaura-<hash>/SourcePackages/artifacts/spmdnlibrary`.

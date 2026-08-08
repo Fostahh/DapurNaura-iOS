@@ -26,9 +26,16 @@ struct CookingClassListView: View {
         @Bindable var router = router
 
         NavigationStack(path: $router.path) {
-            CookingClassListContent(state: viewModel.state) {
-                Task { await viewModel.load() }
-            }
+            CookingClassListContent(
+                state: viewModel.state,
+                selectedCategory: viewModel.selectedCategory,
+                onSelectCategory: { category in
+                    Task { await viewModel.select(category) }
+                },
+                onRetry: {
+                    Task { await viewModel.load() }
+                }
+            )
             .navigationTitle("Kelas Masak")
             // DN-015: the single registration in the app, attached to content that
             // always renders. It previously sat inside `case .loaded`, so tapping
