@@ -1,0 +1,15 @@
+{
+  "originHash" : "d6c5e9ae320b9a312fed98e6a519a3153d4db7c3754356da42c34fe8939a0e44",
+  "pins" : [
+    {
+      "identity" : "spmdnlibrary",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Fostahh/SPMDNLibrary.git",
+      "state" : {
+        "revision" : "bb5cfc14524b8d90a132f2a91084112dbc230e09",
+        "version" : "0.4.0"
+      }
+    }
+  ],
+  "version" : 3
+}
