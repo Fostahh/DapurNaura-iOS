@@ -1,0 +1,31 @@
+//
+//  Alpha.xcconfig
+//  DapurNaura
+//
+//  Audience : internal — family members only
+//  Backend  : staging
+//  Shipped via TestFlight, to the "Alpha" tester group.
+//
+//  Alpha is the EARLIER, less stable tier — smaller audience, staging data.
+//  Beta comes after it. (Conventional order; do not swap.)
+//
+//  COMMITTED. Self-contained — everything this variant needs is below, except the
+//  API key, which is the one value that cannot live in git.
+//
+//  Note: `//` starts a comment in xcconfig, so URLs escape it as `https:/$()/`.
+//
+
+#include "Secrets.xcconfig"
+
+// Partial Info.plist carrying the $(VAR) placeholders. Xcode merges its generated
+// keys on top, so that file only holds what we substitute ourselves.
+INFOPLIST_FILE = DapurNaura/Info.plist
+
+// Alpha, Beta and Release share one bundle id — they are one App Store Connect
+// record separated by TestFlight groups, not by identity.
+PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNaura
+APP_DISPLAY_NAME = DapurNaura
+
+API_BASE_URL = https:/$()/api.rawg.io/api/games
+API_KEY = $(STAGING_API_KEY)
+ENABLE_NETWORK_LOGGING = YES

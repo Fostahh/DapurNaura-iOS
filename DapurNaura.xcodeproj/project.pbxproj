@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9B08E21294EB4BCE14D93237 /* DNLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 24EAB0C1C410B2944EC8A375 /* DNLibrary */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		627A2F4D2FD90AE5009D8E5E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,19 +33,41 @@
 		627A2F562FD90AE5009D8E5E /* DapurNauraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DapurNauraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		62C0F1000000000000000010 /* Exceptions for "DapurNaura" folder in "DapurNaura" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Config/Alpha.xcconfig,
+				Config/Beta.xcconfig,
+				Config/Development.xcconfig,
+				Config/Release.xcconfig,
+				Config/Secrets.xcconfig,
+				Info.plist,
+			);
+			target = 627A2F3E2FD90AE1009D8E5E /* DapurNaura */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		627A2F412FD90AE1009D8E5E /* DapurNaura */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				62C0F1000000000000000010 /* Exceptions for "DapurNaura" folder in "DapurNaura" target */,
+			);
 			path = DapurNaura;
 			sourceTree = "<group>";
 		};
 		627A2F4F2FD90AE5009D8E5E /* DapurNauraTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = DapurNauraTests;
 			sourceTree = "<group>";
 		};
 		627A2F592FD90AE5009D8E5E /* DapurNauraUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = DapurNauraUITests;
 			sourceTree = "<group>";
 		};
@@ -52,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B08E21294EB4BCE14D93237 /* DNLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +139,7 @@
 			);
 			name = DapurNaura;
 			packageProductDependencies = (
+				24EAB0C1C410B2944EC8A375 /* DNLibrary */,
 			);
 			productName = DapurNaura;
 			productReference = 627A2F3F2FD90AE1009D8E5E /* DapurNaura.app */;
@@ -134,8 +162,6 @@
 				627A2F4F2FD90AE5009D8E5E /* DapurNauraTests */,
 			);
 			name = DapurNauraTests;
-			packageProductDependencies = (
-			);
 			productName = DapurNauraTests;
 			productReference = 627A2F4C2FD90AE5009D8E5E /* DapurNauraTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +183,6 @@
 				627A2F592FD90AE5009D8E5E /* DapurNauraUITests */,
 			);
 			name = DapurNauraUITests;
-			packageProductDependencies = (
-			);
 			productName = DapurNauraUITests;
 			productReference = 627A2F562FD90AE5009D8E5E /* DapurNauraUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -195,6 +219,9 @@
 			);
 			mainGroup = 627A2F362FD90AE1009D8E5E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				52BC7D0451ECB3BBA3BF734F /* XCRemoteSwiftPackageReference "SPMDNLibrary" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 627A2F402FD90AE1009D8E5E /* Products */;
 			projectDirPath = "";
@@ -269,8 +296,286 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		627A2F5E2FD90AE5009D8E5E /* Debug */ = {
+		6278A698302381F000B2769D /* Alpha */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Alpha.xcconfig;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Alpha;
+		};
+		6278A699302381F000B2769D /* Alpha */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Alpha.xcconfig;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Alpha;
+		};
+		6278A69A302381F000B2769D /* Alpha */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Alpha.xcconfig;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DapurNaura.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DapurNaura";
+			};
+			name = Alpha;
+		};
+		6278A69B302381F000B2769D /* Alpha */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Alpha.xcconfig;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DapurNaura;
+			};
+			name = Alpha;
+		};
+		6278A69C302381FC00B2769D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Release.xcconfig;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6278A69D302381FC00B2769D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Release.xcconfig;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		6278A69E302381FC00B2769D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Release.xcconfig;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DapurNaura.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DapurNaura";
+			};
+			name = Release;
+		};
+		6278A69F302381FC00B2769D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Release.xcconfig;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = PKLN85RDQ6;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DapurNaura;
+			};
+			name = Release;
+		};
+		627A2F5E2FD90AE5009D8E5E /* Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Development.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -331,10 +636,12 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = Debug;
+			name = Development;
 		};
-		627A2F5F2FD90AE5009D8E5E /* Release */ = {
+		627A2F5F2FD90AE5009D8E5E /* Beta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Beta.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -388,10 +695,12 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Beta;
 		};
-		627A2F612FD90AE5009D8E5E /* Debug */ = {
+		627A2F612FD90AE5009D8E5E /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Development.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -410,7 +719,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Azri.DapurNaura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -420,10 +728,12 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Debug;
+			name = Development;
 		};
-		627A2F622FD90AE5009D8E5E /* Release */ = {
+		627A2F622FD90AE5009D8E5E /* Beta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Beta.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -442,7 +752,6 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Azri.DapurNaura;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -452,10 +761,12 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = Beta;
 		};
-		627A2F642FD90AE5009D8E5E /* Debug */ = {
+		627A2F642FD90AE5009D8E5E /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Development.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -464,7 +775,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Azri.DapurNauraTests;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -474,10 +785,12 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DapurNaura.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DapurNaura";
 			};
-			name = Debug;
+			name = Development;
 		};
-		627A2F652FD90AE5009D8E5E /* Release */ = {
+		627A2F652FD90AE5009D8E5E /* Beta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Beta.xcconfig;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -486,7 +799,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Azri.DapurNauraTests;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -496,17 +809,19 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DapurNaura.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DapurNaura";
 			};
-			name = Release;
+			name = Beta;
 		};
-		627A2F672FD90AE5009D8E5E /* Debug */ = {
+		627A2F672FD90AE5009D8E5E /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Development.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PKLN85RDQ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Azri.DapurNauraUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -516,17 +831,19 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DapurNaura;
 			};
-			name = Debug;
+			name = Development;
 		};
-		627A2F682FD90AE5009D8E5E /* Release */ = {
+		627A2F682FD90AE5009D8E5E /* Beta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 627A2F412FD90AE1009D8E5E /* DapurNaura */;
+			baseConfigurationReferenceRelativePath = Config/Beta.xcconfig;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = PKLN85RDQ6;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = Azri.DapurNauraUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNauraUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -536,7 +853,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = DapurNaura;
 			};
-			name = Release;
+			name = Beta;
 		};
 /* End XCBuildConfiguration section */
 
@@ -544,8 +861,10 @@
 		627A2F3A2FD90AE1009D8E5E /* Build configuration list for PBXProject "DapurNaura" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				627A2F5E2FD90AE5009D8E5E /* Debug */,
-				627A2F5F2FD90AE5009D8E5E /* Release */,
+				627A2F5E2FD90AE5009D8E5E /* Development */,
+				627A2F5F2FD90AE5009D8E5E /* Beta */,
+				6278A698302381F000B2769D /* Alpha */,
+				6278A69C302381FC00B2769D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -553,8 +872,10 @@
 		627A2F602FD90AE5009D8E5E /* Build configuration list for PBXNativeTarget "DapurNaura" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				627A2F612FD90AE5009D8E5E /* Debug */,
-				627A2F622FD90AE5009D8E5E /* Release */,
+				627A2F612FD90AE5009D8E5E /* Development */,
+				627A2F622FD90AE5009D8E5E /* Beta */,
+				6278A699302381F000B2769D /* Alpha */,
+				6278A69D302381FC00B2769D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -562,8 +883,10 @@
 		627A2F632FD90AE5009D8E5E /* Build configuration list for PBXNativeTarget "DapurNauraTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				627A2F642FD90AE5009D8E5E /* Debug */,
-				627A2F652FD90AE5009D8E5E /* Release */,
+				627A2F642FD90AE5009D8E5E /* Development */,
+				627A2F652FD90AE5009D8E5E /* Beta */,
+				6278A69A302381F000B2769D /* Alpha */,
+				6278A69E302381FC00B2769D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -571,13 +894,34 @@
 		627A2F662FD90AE5009D8E5E /* Build configuration list for PBXNativeTarget "DapurNauraUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				627A2F672FD90AE5009D8E5E /* Debug */,
-				627A2F682FD90AE5009D8E5E /* Release */,
+				627A2F672FD90AE5009D8E5E /* Development */,
+				627A2F682FD90AE5009D8E5E /* Beta */,
+				6278A69B302381F000B2769D /* Alpha */,
+				6278A69F302381FC00B2769D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		52BC7D0451ECB3BBA3BF734F /* XCRemoteSwiftPackageReference "SPMDNLibrary" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fostahh/SPMDNLibrary.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		24EAB0C1C410B2944EC8A375 /* DNLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52BC7D0451ECB3BBA3BF734F /* XCRemoteSwiftPackageReference "SPMDNLibrary" */;
+			productName = DNLibrary;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 627A2F372FD90AE1009D8E5E /* Project object */;
 }
