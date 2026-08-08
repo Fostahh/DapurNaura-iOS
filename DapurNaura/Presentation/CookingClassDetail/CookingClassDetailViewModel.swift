@@ -38,9 +38,14 @@ final class CookingClassDetailViewModel {
             case .failure(let failure):
                 state = .failed(failure.error.indonesianMessage)
             }
+        } catch is CancellationError {
+            // The screen is going away; leave state untouched.
         } catch {
-            // The use case returns sealed results and never throws — only task
-            // cancellation lands here, and a cancelled screen has nothing to show.
+            // The use case returns sealed results, so this should be unreachable.
+            // But `state` is already .loading by this point: swallowing the error
+            // would strand the screen on a spinner with no retry, which is a worse
+            // failure than an honest message.
+            state = .failed("Terjadi kesalahan. Silakan coba lagi.")
         }
     }
 }

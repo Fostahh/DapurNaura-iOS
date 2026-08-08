@@ -13,23 +13,24 @@ Browse **cooking classes** (*kelas*) → open one to see its **recipes** → ope
 ingredients (*bahan-bahan*), the step-by-step method, and a how-to video. Content is Bahasa
 Indonesia. Audience is people learning to cook.
 
-**The first screen exists (DN-009):** the cooking-class list — SwiftUI + MVVM in
-`DapurNaura/CookingClassList/`, fed by `DNLibrary`'s `DNDataLayer.stub()` (contract replay; no
-backend exists yet). Everything else — class detail, recipes, video, payment — is still to build.
+**Two screens exist:** the cooking-class list (DN-009) and the class detail (DN-012), both fed by
+`DNLibrary`'s `DNDataLayer.stub()` (contract replay; no backend exists yet). The recipe screen is a
+placeholder. Everything else — the real recipe screen, video, payment, any notion of a signed-in
+user — is still to build.
 
 ## Project shape
 
-SwiftUI, an Xcode project (not an SPM package). Source today:
+SwiftUI, an Xcode project (not an SPM package). **How the code is organised, and the rules it must
+follow, live in [`docs/CODEBASE-ARCHITECTURE.md`](docs/CODEBASE-ARCHITECTURE.md)** — §3 owns the
+folder layout, §4 navigation, §5 the composition root. Read it before adding a file; it is not
+repeated here.
 
-- **`DapurNaura/DapurNauraApp.swift`** — `@main` entry point and the **composition root**: builds
-  `DNDataLayer.stub()` and hands its use case to the ViewModel. Swapping stub → live
-  `DNDataLayer(config:)` happens here, and only here, when a backend exists.
-- **`DapurNaura/CookingClassList/`** — the DN-009 screen. `CookingClassListViewModel`
-  (`@Observable`, `@MainActor`, no SwiftUI import — state machine `loading/loaded/failed`) and
-  `CookingClassListView` (renders state; Bahasa Indonesia strings; `purchaseStatus` badge is a UI
-  hint, never a gate). **Follow this MVVM shape for every next screen.**
-- **`DapurNaura/ContentView.swift`** — stock template leftover, no longer shown.
-- **`DapurNaura/AppConfig.swift`** — reads build-variant values out of `Info.plist`, see
+The entry points worth naming:
+
+- **`DapurNaura/App/DapurNauraApp.swift`** — `@main` and the **composition root**: builds
+  `DNDataLayer.stub()`, constructs the `ViewModelFactory` and owns the `DapurNauraAppRouter`.
+  Swapping stub → live `DNDataLayer(config:)` happens here, and only here, when a backend exists.
+- **`DapurNaura/App/DapurNauraAppConfig.swift`** — reads build-variant values out of `Info.plist`, see
   [Build variants](#build-variants). **Still uncalled** — the stub path needs no URL or key. Its
   first caller is the live-backend switch, which must also replace the stale RAWG `API_BASE_URL`
   in the xcconfigs.
@@ -83,11 +84,11 @@ App Store Connect record separated by TestFlight groups, not by identity. Only D
 (`.dev`), so a developer build can sit alongside an installed TestFlight build.
 
 **How a value reaches code:** `DapurNaura/Config/<Variant>.xcconfig` → `$(VAR)` placeholder in
-`DapurNaura/Info.plist` → `AppConfig.swift` reads it via
+`DapurNaura/Info.plist` → `DapurNauraAppConfig.swift` reads it via
 `Bundle.main.object(forInfoDictionaryKey:)`. Never read Info.plist directly elsewhere; add an
-accessor to `AppConfig` instead.
+accessor to `DapurNauraAppConfig` instead.
 
-`AppConfig` **fails loudly** on a missing value, including the case where the substitution never
+`DapurNauraAppConfig` **fails loudly** on a missing value, including the case where the substitution never
 happened and the literal `$(API_KEY)` is left in the plist — otherwise a missing config surfaces as
 a confusing 401 rather than a clear error.
 
@@ -114,7 +115,7 @@ base file** to remove the duplication.
 ### Secrets
 
 `Config/Secrets.xcconfig` is **gitignored** and holds *only* `STAGING_API_KEY` and `PROD_API_KEY`.
-Create it by hand with those two lines; `AppConfig` prints exactly that if it is missing.
+Create it by hand with those two lines; `DapurNauraAppConfig` prints exactly that if it is missing.
 
 Everything else stays **committed** — URLs, bundle ids and flags belong in review, so a variant
 silently changing environment shows up in the diff.
@@ -189,9 +190,11 @@ final commit that bumps to the new version after release. By design, not a bug t
    *(The former known issue 2 — a 26.2 deployment target with no matching simulator runtime — is
    gone: DN-013 lowered the target to 17.0, and an iOS 26.3 runtime was installed in the meantime.)*
 
-3. **This repo has no git remote yet**, so the push/PR half of the platform flow cannot run here.
-   Commits stay local until a repo is created.
+3. **Nothing is merged.** The remote is `github.com/Fostahh/DapurNaura-iOS`, and the ticket branches
+   are stacked on each other rather than on `main` — `DN-003 → DN-009 → DN-013 → DN-012 → DN-014 →
+   DN-015`. Merge their PRs in that order. On `main` the app is still a SwiftUI shell with build
+   variants and no data layer.
 
-4. **Nothing consumes `AppConfig`.** The variant plumbing is verified end to end, but the stub
-   data path needs no URL or key, so `AppConfig` stays uncalled until the live-backend switch —
+4. **Nothing consumes `DapurNauraAppConfig`.** The variant plumbing is verified end to end, but the stub
+   data path needs no URL or key, so `DapurNauraAppConfig` stays uncalled until the live-backend switch —
    a regression in it would currently be silent.

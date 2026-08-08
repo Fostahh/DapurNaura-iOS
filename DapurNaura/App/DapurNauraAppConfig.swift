@@ -1,5 +1,5 @@
 //
-//  AppConfig.swift
+//  DapurNauraAppConfig.swift
 //  DapurNaura
 //
 //  Created by Mohammad Azri Khairuddin on 10/06/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AppConfig {
+enum DapurNauraAppConfig {
     static var baseURL: String {
         string(forKey: "BaseURL", placeholder: "$(API_BASE_URL)")
     }
@@ -22,7 +22,7 @@ enum AppConfig {
 }
 
 // MARK: - Reading
-private extension AppConfig {
+private extension DapurNauraAppConfig {
     static func string(forKey key: String, placeholder: String) -> String {
         guard let value = Bundle.main.object(forInfoDictionaryKey: key) as? String,
               !value.isEmpty,
