@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9B08E21294EB4BCE14D93237 /* DNLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 24EAB0C1C410B2944EC8A375 /* DNLibrary */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		627A2F4D2FD90AE5009D8E5E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -55,11 +59,15 @@
 		};
 		627A2F4F2FD90AE5009D8E5E /* DapurNauraTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = DapurNauraTests;
 			sourceTree = "<group>";
 		};
 		627A2F592FD90AE5009D8E5E /* DapurNauraUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = DapurNauraUITests;
 			sourceTree = "<group>";
 		};
@@ -70,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B08E21294EB4BCE14D93237 /* DNLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +139,7 @@
 			);
 			name = DapurNaura;
 			packageProductDependencies = (
+				24EAB0C1C410B2944EC8A375 /* DNLibrary */,
 			);
 			productName = DapurNaura;
 			productReference = 627A2F3F2FD90AE1009D8E5E /* DapurNaura.app */;
@@ -152,8 +162,6 @@
 				627A2F4F2FD90AE5009D8E5E /* DapurNauraTests */,
 			);
 			name = DapurNauraTests;
-			packageProductDependencies = (
-			);
 			productName = DapurNauraTests;
 			productReference = 627A2F4C2FD90AE5009D8E5E /* DapurNauraTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -175,8 +183,6 @@
 				627A2F592FD90AE5009D8E5E /* DapurNauraUITests */,
 			);
 			name = DapurNauraUITests;
-			packageProductDependencies = (
-			);
 			productName = DapurNauraUITests;
 			productReference = 627A2F562FD90AE5009D8E5E /* DapurNauraUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -214,6 +220,7 @@
 			mainGroup = 627A2F362FD90AE1009D8E5E;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				52BC7D0451ECB3BBA3BF734F /* XCRemoteSwiftPackageReference "SPMDNLibrary" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 627A2F402FD90AE1009D8E5E /* Products */;
@@ -896,6 +903,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		52BC7D0451ECB3BBA3BF734F /* XCRemoteSwiftPackageReference "SPMDNLibrary" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fostahh/SPMDNLibrary.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		24EAB0C1C410B2944EC8A375 /* DNLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52BC7D0451ECB3BBA3BF734F /* XCRemoteSwiftPackageReference "SPMDNLibrary" */;
+			productName = DNLibrary;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 627A2F372FD90AE1009D8E5E /* Project object */;
 }
