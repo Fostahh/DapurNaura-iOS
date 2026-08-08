@@ -30,7 +30,7 @@ struct CookingClassRow: View {
                 .lineLimit(2)
 
             HStack {
-                Text(rupiah(cookingClass.price))
+                Text(DNFormat.shared.rupiah(value: cookingClass.price))
                     .font(.subheadline.bold())
                 Spacer()
                 Text("\(cookingClass.recipeCount) resep")

@@ -49,12 +49,12 @@ final class RecipePlaceholderViewModel {
                     state = .failed("Resep tidak ditemukan.")
                 }
             case .failure(let failure):
-                state = .failed(failure.error.indonesianMessage)
+                state = .failed(DNErrorKt.userMessage(failure.error))
             }
         } catch is CancellationError {
             // The screen is going away; leave state untouched.
         } catch {
-            state = .failed("Terjadi kesalahan. Silakan coba lagi.")
+            state = .failed(DNErrorKt.userMessage(DNErrorUnknown(message: nil)))
         }
     }
 }
