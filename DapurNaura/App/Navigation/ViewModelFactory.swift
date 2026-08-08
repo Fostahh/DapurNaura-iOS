@@ -35,11 +35,7 @@ struct ViewModelFactory {
         )
     }
 
-    func makeRecipePlaceholder(classId: String, recipeId: String) -> RecipePlaceholderViewModel {
-        RecipePlaceholderViewModel(
-            classId: classId,
-            recipeId: recipeId,
-            getCookingClassDetail: dataLayer.getCookingClassDetail
-        )
+    func makeRecipeDetail(recipeId: String) -> RecipeDetailViewModel {
+        RecipeDetailViewModel(recipeId: recipeId, getRecipe: dataLayer.getRecipe)
     }
 }

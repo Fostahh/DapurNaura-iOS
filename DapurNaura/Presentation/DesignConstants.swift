@@ -22,6 +22,12 @@ enum DesignConstants {
     static let detailImageHeight: CGFloat = 200
     static let thumbnailSize: CGFloat = 72
 
+    // DN-021 — the recipe method reads as two aligned columns: quantity beside ingredient,
+    // number beside step. Fixed widths so the text lines up down the page rather than
+    // stepping in and out with each row's length.
+    static let quantityColumnWidth: CGFloat = 72
+    static let stepNumberWidth: CGFloat = 22
+
     static let badgeHorizontalPadding: CGFloat = 8
     static let badgeVerticalPadding: CGFloat = 4
     static let badgeTintOpacity: Double = 0.15
