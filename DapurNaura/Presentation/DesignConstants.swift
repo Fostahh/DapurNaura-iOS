@@ -32,6 +32,12 @@ enum DesignConstants {
     static let badgeVerticalPadding: CGFloat = 4
     static let badgeTintOpacity: Double = 0.15
 
+    // DN-025 — the category filter chips. Height comes from §9's 44pt tap target rather than
+    // from vertical padding, so a chip stays tappable at every text size.
+    static let chipHorizontalPadding: CGFloat = 14
+    static let chipTintOpacity: Double = 0.12
+    static let minimumTapTarget: CGFloat = 44
+
     static let noticePadding: CGFloat = 12
     static let noticeTintOpacity: Double = 0.12
     static let noticeCornerRadius: CGFloat = 10
