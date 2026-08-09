@@ -17,6 +17,11 @@ struct RouteDestination: View {
 
     var body: some View {
         switch route {
+        case .classList(.list):
+            // DN-033: the list used to be the root and owned the stack. It is now
+            // pushed from the Kelas Online / Kelas Offline choice like any other screen.
+            CookingClassListView(viewModel: factory.makeCookingClassList())
+
         case .classes(.detail(let classId)):
             CookingClassDetailView(
                 viewModel: factory.makeCookingClassDetail(classId: classId)

@@ -26,11 +26,10 @@ struct DapurNauraApp: App {
 
     var body: some Scene {
         WindowGroup {
-            CookingClassListView(
-                viewModel: factory.makeCookingClassList(),
-                factory: factory
-            )
-            .environment(router)
+            // DN-033: the app opens on the Kelas Online / Kelas Offline choice. The
+            // class list is now pushed from it rather than being the root.
+            CookingClassSelectionView(factory: factory)
+                .environment(router)
         }
     }
 }

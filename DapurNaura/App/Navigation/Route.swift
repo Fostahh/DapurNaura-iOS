@@ -17,6 +17,7 @@ import Foundation
 /// point each package registers its own destination and the path becomes
 /// `NavigationPath`. Not when the enum gets long.
 enum Route: Hashable {
+    case classList(CookingClassListRoute)
     case classes(ClassRoute)
     case recipes(RecipeRoute)
 }
