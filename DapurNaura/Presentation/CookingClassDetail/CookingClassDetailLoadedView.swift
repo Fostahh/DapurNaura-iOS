@@ -59,9 +59,6 @@ struct CookingClassDetailLoadedView: View {
     }
 
     private var isPurchased: Bool {
-        switch detail.purchaseStatus {
-        case .purchased: true
-        default: false
-        }
+        detail.purchaseStatus == .purchased
     }
 }
