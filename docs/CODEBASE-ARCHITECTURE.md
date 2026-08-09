@@ -358,6 +358,8 @@ across both platforms. **Do not reintroduce a Swift-side formatter to avoid the 
 
 ## Before submitting a change
 
+- [ ] **It builds** — `xcodebuild … build` reports `** BUILD SUCCEEDED **`, with an **id-based**
+      simulator destination (DN-034). SwiftLint compiles nothing, so it cannot answer this
 - [ ] No ViewModel imports SwiftUI
 - [ ] No new type shares a file with another type
 - [ ] Navigation uses `NavigationLink(value:)`, and the single destination registration is untouched
@@ -370,8 +372,13 @@ across both platforms. **Do not reintroduce a Swift-side formatter to avoid the 
 
 ## What the build enforces for you
 
-**SwiftLint, and nothing else.** There is no compiler equivalent of the data layer's `explicitApi()`
-on this side.
+**SwiftLint, and the compiler.** There is no equivalent of the data layer's `explicitApi()` on this
+side — nothing here fails a build over an architecture rule.
+
+The compiler is listed because DN-034 made running it mandatory (see *Before submitting a change*),
+and because it is the only thing in this repository that answers *"does this work at all"*. It
+catches nothing in the rules below; SwiftLint catches nothing the compiler does. Neither stands in
+for the other.
 
 `.swiftlint.yml` is tuned to this document rather than pulled in wholesale, including two custom
 rules that enforce §9 and §4 directly:

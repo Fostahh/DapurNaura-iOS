@@ -56,6 +56,20 @@ unless a ticket explicitly asks for them.
 
 ## Build & test
 
+> **Every change here is built before it is offered for review.** Owner's rule, 2026-08-09
+> (DN-034). Any Swift file, the project file or an xcconfig — build it, and keep going until
+> `** BUILD SUCCEEDED **`. A failing build is fixed, not mentioned as a caveat beside the diff.
+>
+> **Build only. Do not run it, install it or boot a simulator** — the owner scoped it that way, and
+> that is what keeps it cheap enough to do every time. It adds a floor under the owner's manual
+> verification of the running app; it does not replace it.
+>
+> **`swiftlint lint` is not a substitute and never was.** It checks shape and compiles nothing, so
+> *"0 violations"* is equally true of code that does not build.
+>
+> Use an **id-based destination** — the two traps below are exactly what a casually written
+> destination hits.
+
 Schemes are **per variant**. There is no scheme called plain `DapurNaura` — the four are
 `DapurNaura Dev`, `DapurNaura Alpha`, `DapurNaura Beta` and `DapurNaura Release`, and the space in
 the name means they must be quoted.
