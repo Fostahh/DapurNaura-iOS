@@ -909,8 +909,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Fostahh/SPMDNLibrary.git";
 			requirement = {
-				kind = exactVersion;
-				version = 0.6.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
