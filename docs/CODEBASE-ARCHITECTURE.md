@@ -431,6 +431,7 @@ Found by review on 2026-08-06, when this document was written against code that 
 | §4 | `RecipeLink`, a feature component, named `Route` and chose the destination | ✅ DN-015 |
 | §4 | No router existed — the stack used SwiftUI's implicit path, though this document specified one | ✅ DN-015 |
 | §10 | `Rupiah.swift` and `DNError+Message.swift` format in Swift; both must move to DNLibrary | ✅ DN-016 |
+| §10 | `PurchaseStatusBadge` worded a library enum in Swift — a total function from `PurchaseStatus` to a string a user reads, which §10 puts in DNLibrary | ✅ DN-026 |
 
 **`swiftlint lint` reports 0 violations**, as of DN-016. Every row above is struck. Keep it that way:
 the value of a clean linter is that the next violation is visible the moment it appears, and a
