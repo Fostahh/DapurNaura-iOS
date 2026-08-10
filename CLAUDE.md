@@ -245,17 +245,26 @@ final commit that bumps to the new version after release. By design, not a bug t
    data path needs no URL or key, so `DapurNauraAppConfig` stays uncalled until the live-backend switch —
    a regression in it would currently be silent.
 
-5. **Stale SPM state survives a rebuild, and it hides in three places, not one.** Hit by DN-025 and
-   again by DN-035/DN-036 — each time in a different cache, each time with a symptom that does not
-   look like caching:
+5. **Stale SPM state survives a rebuild, and it hides in four places.** Hit by DN-025, DN-035/DN-036
+   and DN-037 — each time in a different cache, each time with a symptom that does not look like
+   caching. **Do not hunt these by hand: `scripts/repin.sh <version>` clears all four, and then
+   checks the version it actually landed on.** The table is here to explain the failures, not to be
+   worked through:
 
    | Symptom | Where the staleness is | Clear |
    |---|---|---|
    | `cannot find type 'X' in scope` for a newly added library type, while every other DNLibrary type in the same file resolves | `DerivedData/…/SourcePackages` | `xcodebuild … clean` **and** `rm -rf ~/Library/Developer/Xcode/DerivedData/DapurNaura-<hash>/SourcePackages` |
    | A resolve keeps landing on the **previous** version even after `Package.resolved` is deleted, though the new tag is on the remote | `~/Library/Caches/org.swift.swiftpm/repositories/SPMDNLibrary-<hash>` — a cached clone that never fetched the new tag | delete that directory |
    | `failed downloading … DNLibrary.zip … already exists in file system` | `~/Library/Caches/org.swift.swiftpm/artifacts/https___…_DNLibrary_zip` | delete that directory |
+   | A resolve keeps landing on the **previous** version **even after all three above are cleared** | `DerivedData/…/SourcePackages/workspace-state.json` — it records the resolved version, and `xcodebuild` restores from it | `rm -rf ~/Library/Developer/Xcode/DerivedData/DapurNaura-<hash>/SourcePackages` |
 
-   The middle one is the nastiest: nothing reports an error, the resolve simply succeeds on the old
-   version, and `Package.resolved` looks deliberate afterwards. **Check the version it resolved to,
-   never just that it resolved** — the repin step exists to move that number, so confirming it moved
+   **The last row was found by `repin.sh` failing its own assertion on its first run** (DN-037): the
+   script cleared the first three, asked for `0.8.0`, and resolved to `0.7.0`. `SourcePackages`
+   appears twice in this table because it causes two unrelated symptoms, and it had only ever been
+   documented for the first.
+
+   Rows two and four are the dangerous ones: nothing reports an error, the resolve simply succeeds on
+   the old version, and `Package.resolved` looks deliberate afterwards. **Check the version it
+   resolved to, never just that it resolved** — the repin step exists to move that number, so
+   confirming it moved
    is the step, not a formality.
