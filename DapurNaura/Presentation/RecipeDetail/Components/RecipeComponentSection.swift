@@ -17,6 +17,11 @@ import DNLibrary
 struct RecipeComponentSection: View {
     let component: RecipeComponent
 
+    /// Scales with the text beside it (DN-038). This is the reader's place-marker in a method they
+    /// are following with their hands busy — which is exactly the reader most likely to have raised
+    /// their text size, and a two-digit step no longer fits 22pt once they have.
+    @ScaledMetric(relativeTo: .subheadline) private var stepNumberWidth = DesignConstants.stepNumberWidth
+
     var body: some View {
         VStack(alignment: .leading, spacing: DesignConstants.rowSpacing) {
             if let name = component.name {
@@ -45,7 +50,7 @@ struct RecipeComponentSection: View {
                     HStack(alignment: .firstTextBaseline, spacing: DesignConstants.rowGutter) {
                         Text("\(index + 1).")
                             .font(.subheadline.bold())
-                            .frame(width: DesignConstants.stepNumberWidth, alignment: .trailing)
+                            .frame(width: stepNumberWidth, alignment: .trailing)
                         Text(step.text)
                             .font(.subheadline)
                         Spacer(minLength: 0)

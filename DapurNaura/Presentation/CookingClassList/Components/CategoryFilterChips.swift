@@ -45,10 +45,12 @@ struct CategoryFilterChips: View {
         .scrollIndicators(.hidden)
     }
 
-    private func background(for category: CookingClassCategory?) -> some ShapeStyle {
+    /// DN-038: returns `Color`, not an erased `ShapeStyle`. Both branches were already `Color`, so
+    /// the `AnyShapeStyle` wrapper bought nothing and boxed an existential per chip per body pass.
+    private func background(for category: CookingClassCategory?) -> Color {
         category == selected
-            ? AnyShapeStyle(Color.accentColor)
-            : AnyShapeStyle(Color.accentColor.opacity(DesignConstants.chipTintOpacity))
+            ? .accentColor
+            : .accentColor.opacity(DesignConstants.chipTintOpacity)
     }
 }
 

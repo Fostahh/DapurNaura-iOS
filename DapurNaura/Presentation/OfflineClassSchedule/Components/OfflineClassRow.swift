@@ -19,6 +19,10 @@ import DNLibrary
 struct OfflineClassRow: View {
     let offlineClass: OfflineClass
 
+    /// Scales with the day number it holds (DN-038), which is `.title` — so this is the first of the
+    /// app's fixed columns to overflow as the text size rises, not the last.
+    @ScaledMetric(relativeTo: .title) private var dateColumnWidth = DesignConstants.ticketDateColumnWidth
+
     var body: some View {
         HStack(spacing: DesignConstants.rowGutter) {
             RemoteImage(urlString: offlineClass.imageUrl, showsProgress: false)
@@ -74,7 +78,7 @@ struct OfflineClassRow: View {
                 .font(.title)
                 .bold()
         }
-        .frame(width: DesignConstants.ticketDateColumnWidth)
+        .frame(width: dateColumnWidth)
     }
 }
 
