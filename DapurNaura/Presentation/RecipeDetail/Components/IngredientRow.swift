@@ -18,11 +18,16 @@ import DNLibrary
 struct IngredientRow: View {
     let ingredient: Ingredient
 
+    /// The column holds text, so it scales with the text (DN-038). §9 owns the base number; a view
+    /// owns how it grows. Fixed at 72pt the quantity truncated at the larger accessibility sizes —
+    /// the font scaled and the box it sat in did not.
+    @ScaledMetric(relativeTo: .subheadline) private var quantityWidth = DesignConstants.quantityColumnWidth
+
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: DesignConstants.rowGutter) {
             Text(ingredient.quantity)
                 .font(.subheadline.bold())
-                .frame(width: DesignConstants.quantityColumnWidth, alignment: .leading)
+                .frame(width: quantityWidth, alignment: .leading)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(ingredient.name)

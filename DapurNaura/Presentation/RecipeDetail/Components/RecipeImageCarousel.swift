@@ -19,7 +19,12 @@ struct RecipeImageCarousel: View {
                 RemoteImage(urlString: url)
             }
         }
-        .tabViewStyle(.page)
+        // DN-038. The dots are drawn as plain white circles with no backing plate, so over a light
+        // recipe photo they disappear — and with them the only sign that more pictures exist. The
+        // backing plate holds them against any image. One picture shows no dots at all: a single
+        // dot reads as a carousel that will not scroll.
+        .tabViewStyle(.page(indexDisplayMode: urls.count > 1 ? .always : .never))
+        .indexViewStyle(.page(backgroundDisplayMode: .always))
         .frame(height: DesignConstants.detailImageHeight)
         .clipShape(.rect(cornerRadius: DesignConstants.cornerRadius))
     }

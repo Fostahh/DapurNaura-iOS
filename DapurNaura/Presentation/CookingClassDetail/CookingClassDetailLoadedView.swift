@@ -41,15 +41,20 @@ struct CookingClassDetailLoadedView: View {
                 // open only in a class the user has bought, and in every other
                 // state the row is inert. The ingredients, method and video are
                 // not merely hidden then; the server never sent them.
-                ForEach(detail.recipes, id: \.id) { recipe in
-                    if isPurchased {
+                // DN-038: the branch is outside the loop. `isPurchased` is constant across every
+                // row, so testing it per recipe built a `_ConditionalContent` per recipe to reach
+                // an answer the whole list shares.
+                if isPurchased {
+                    ForEach(detail.recipes, id: \.id) { recipe in
                         NavigationLink(
                             value: Route.recipes(.detail(classId: detail.id, recipeId: recipe.id))
                         ) {
                             RecipeRow(recipe: recipe, openable: true)
                         }
                         .buttonStyle(.plain)
-                    } else {
+                    }
+                } else {
+                    ForEach(detail.recipes, id: \.id) { recipe in
                         RecipeRow(recipe: recipe, openable: false)
                     }
                 }

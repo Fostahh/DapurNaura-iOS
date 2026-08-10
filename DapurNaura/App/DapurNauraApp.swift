@@ -8,7 +8,11 @@
 import SwiftUI
 import DNLibrary
 
+// DN-038: `@MainActor` on the type, because both stored properties below initialise main-actor
+// types from a synthesised `init()` that is nonisolated. Swift 5 allows the implicit hop; Swift 6
+// makes it an error. An App's `body` is main-actor already, so this only states what was true.
 @main
+@MainActor
 struct DapurNauraApp: App {
     // Composition root. Stub data until a backend exists (DN-009): the library
     // replays the approved contract fixtures through its real decoding path.

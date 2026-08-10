@@ -54,6 +54,12 @@ struct NoticeSheet: View {
     /// gets it without knowing the flag exists, and opting out is visible at the call site.
     var allowsDragToDismiss: Bool = true
 
+    /// DN-038. SwiftUI does not gate an author-written `.transition` on this setting — it has to be
+    /// read. **The animation is not removed, only its travel**: a full-height card crossing the
+    /// screen is what Reduce Motion is about, while snapping the sheet in with no animation at all
+    /// would lose the cue that tells the reader what just changed.
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var dragOffset: CGFloat = 0
 
     var body: some View {
@@ -91,7 +97,8 @@ struct NoticeSheet: View {
         // the subtree, which includes the close button's tap — the one way out of a sheet
         // that can no longer be dragged away.
         .gesture(dragToDismiss, including: allowsDragToDismiss ? .all : .subviews)
-        .transition(.move(edge: .bottom))
+        // The scrim above is already a fade and needs no equivalent.
+        .transition(reduceMotion ? .opacity : .move(edge: .bottom))
     }
 
     private var card: some View {
