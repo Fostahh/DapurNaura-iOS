@@ -17,8 +17,6 @@ import SwiftUI
 ///
 /// Screen level, so it may name `Route` (§3). `ClassKindCard` may not.
 struct CookingClassSelectionContent: View {
-    let onSelectOffline: () -> Void
-
     var body: some View {
         ScrollView {
             VStack(spacing: DesignConstants.classCardSpacing) {
@@ -32,9 +30,9 @@ struct CookingClassSelectionContent: View {
                 }
                 .buttonStyle(.plain)
 
-                // Kelas Offline is not dimmed, disabled or badged "coming soon" —
-                // owner's decision, 2026-08-09. Pressing it is answered by the sheet.
-                Button(action: onSelectOffline) {
+                // DN-036: this used to raise a "Segera Hadir" notice. It now pushes the real
+                // schedule, so both cards are links and neither is a special case.
+                NavigationLink(value: Route.offlineClasses(.schedule)) {
                     ClassKindCard(
                         imageURL: "https://placehold.co/300x300/png?text=Kelas+Offline",
                         title: "Kelas Offline",
@@ -52,7 +50,7 @@ struct CookingClassSelectionContent: View {
 
 #Preview {
     NavigationStack {
-        CookingClassSelectionContent(onSelectOffline: {})
+        CookingClassSelectionContent()
             .navigationTitle("Dapur Naura")
     }
 }

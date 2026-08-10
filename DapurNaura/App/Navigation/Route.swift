@@ -20,4 +20,5 @@ enum Route: Hashable {
     case classList(CookingClassListRoute)
     case classes(ClassRoute)
     case recipes(RecipeRoute)
+    case offlineClasses(OfflineClassRoute)
 }
