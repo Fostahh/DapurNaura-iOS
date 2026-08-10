@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import DNLibrary
 
 /// Shared layout values, so two screens cannot drift apart and a third does not
 /// have to guess. Fonts are deliberately absent: §9 requires semantic fonts
@@ -85,4 +86,26 @@ enum DesignConstants {
     /// How far the sheet must be dragged down before letting go dismisses it. Short enough
     /// to feel willing, long enough that a scroll-like flick does not close it by accident.
     static let noticeDismissDragDistance: CGFloat = 120
+
+    // DN-036 — the offline schedule. The ticket keeps its picture square on the leading edge, and
+    // the date column is wide enough for a two-digit day under a four-letter month ("Sept").
+    static let ticketImageSize: CGFloat = 88
+    static let ticketDateColumnWidth: CGFloat = 56
+    static let ticketBorderWidth: CGFloat = 1.5
+    static let ticketCornerRadius: CGFloat = 16
+    static let sectionHeaderSpacing: CGFloat = 6
+    static let bulletColumnWidth: CGFloat = 14
+
+    /// The colour carrying a class's availability — on its badge and on its outline.
+    ///
+    /// A function rather than three loose constants, because the mapping *is* the decision: green
+    /// reads *go*, red reads *stop*, and the middle one has to be visibly neither. It lives in the
+    /// app because a tint is view context (§10) — the library owns the words, not the palette.
+    static func availabilityTint(for availability: OfflineClassAvailability) -> Color {
+        switch availability {
+        case .available: .green
+        case .nearlyFull: .orange
+        case .full: .red
+        }
+    }
 }

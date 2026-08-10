@@ -27,6 +27,11 @@ struct RouteDestination: View {
                 viewModel: factory.makeCookingClassDetail(classId: classId)
             )
 
+        case .offlineClasses(.schedule):
+            // DN-036: the Kelas Offline card used to raise a "Segera Hadir" notice. It now opens
+            // the real schedule.
+            OfflineClassScheduleView(viewModel: factory.makeOfflineClassSchedule())
+
         case .recipes(.detail(_, let recipeId)):
             // DN-021: the recipe is fetched by its own id. classId still travels in the route
             // because a recipe is only reachable through the class that teaches it, and a deep

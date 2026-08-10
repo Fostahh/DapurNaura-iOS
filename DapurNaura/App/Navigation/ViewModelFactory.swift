@@ -38,4 +38,10 @@ struct ViewModelFactory {
     func makeRecipeDetail(recipeId: String) -> RecipeDetailViewModel {
         RecipeDetailViewModel(recipeId: recipeId, getRecipe: dataLayer.getRecipe)
     }
+
+    func makeOfflineClassSchedule() -> OfflineClassScheduleViewModel {
+        OfflineClassScheduleViewModel(
+            getOfflineClassSchedule: dataLayer.getOfflineClassSchedule
+        )
+    }
 }

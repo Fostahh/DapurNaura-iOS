@@ -43,6 +43,11 @@ struct NoticeSheet: View {
     let title: String
     let message: String
 
+    /// The button at the foot of the sheet. **Both nil means no button at all** — which is how a
+    /// full class is drawn: being full removes the way in, not the way to look.
+    var actionTitle: String?
+    var action: (() -> Void)?
+
     /// Whether dragging the card down dismisses it. **Defaults to on, and the one caller
     /// today turns it off** (owner's decision, 2026-08-09 — not needed yet). That direction
     /// is deliberate: dragging a sheet down is what iOS users expect, so the next screen
@@ -74,7 +79,7 @@ struct NoticeSheet: View {
 
     private var sheet: some View {
         VStack(spacing: DesignConstants.sectionSpacing) {
-            closeButton
+            SheetCloseButton { isPresented = false }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.trailing, DesignConstants.sectionSpacing)
 
@@ -100,10 +105,19 @@ struct NoticeSheet: View {
                 .font(.title3)
                 .bold()
 
+            // Leading, not centred. A single sentence reads fine centred; a bulleted list built
+            // upstream does not — ragged on both edges is hard to scan down.
             Text(message)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            if let actionTitle, let action {
+                Button(actionTitle, action: action)
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .frame(maxWidth: .infinity)
+            }
         }
         .padding(DesignConstants.sectionSpacing)
         .frame(maxWidth: .infinity)
@@ -119,36 +133,6 @@ struct NoticeSheet: View {
             .fill(.background)
             .ignoresSafeArea(edges: .bottom)
         }
-    }
-
-    /// Floats over the scrim above the card — owner's instruction: not inside the sheet,
-    /// and no button along its bottom.
-    ///
-    /// A rounded square rather than a disc, at the owner's direction (2026-08-09). Drawn at
-    /// the full 44pt tap target, so §9's minimum needs no separate hit area to reach.
-    private var closeButton: some View {
-        Button { isPresented = false } label: {
-            Image(systemName: "xmark")
-                .font(.headline)
-                .foregroundStyle(.primary)
-                .frame(
-                    width: DesignConstants.minimumTapTarget,
-                    height: DesignConstants.minimumTapTarget
-                )
-                .background(
-                    .background,
-                    in: .rect(
-                        cornerRadius: DesignConstants.noticeCloseCornerRadius,
-                        style: .continuous
-                    )
-                )
-                .shadow(
-                    color: .black.opacity(DesignConstants.noticeCloseShadowOpacity),
-                    radius: DesignConstants.noticeCloseShadowRadius,
-                    y: DesignConstants.noticeCloseShadowOffsetY
-                )
-        }
-        .buttonStyle(.plain)
     }
 
     /// Attached always, enabled by `allowsDragToDismiss`. Gating the mask rather than
