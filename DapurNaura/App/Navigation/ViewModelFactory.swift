@@ -24,6 +24,14 @@ struct ViewModelFactory {
         self.dataLayer = dataLayer
     }
 
+    /// DN-040. **Injects nothing, and that is the point of it being here anyway**: login checks
+    /// only that two boxes are filled, so there is no use case yet. Keeping construction in the
+    /// factory means the day authentication becomes real, the wiring already has a home and no
+    /// call site moves.
+    func makeLogin() -> LoginViewModel {
+        LoginViewModel()
+    }
+
     func makeCookingClassList() -> CookingClassListViewModel {
         CookingClassListViewModel(getCookingClasses: dataLayer.getCookingClasses)
     }
