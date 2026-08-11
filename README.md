@@ -20,19 +20,33 @@ no localisation planned.
 
 ## Features
 
-What runs today, against stub data:
+What runs today, against stub data, in the order a user meets it:
 
-- **Class list** — image, name, description, price in rupiah, recipe count, purchase-status badge
-- **Class detail** — the class and the recipes it teaches, with a buy button whose behaviour follows
-  the purchase state
+- **Login** (DN-040) — **it authenticates nobody.** Any email and any password get in; the only gate
+  is that neither box is empty. There is no session and nothing survives a relaunch
+- **Kelas Online / Kelas Offline** (DN-033) — the choice the app opens onto once past login
+- **Class list** (DN-009) — image, name, description, price in rupiah, recipe count, purchase-status
+  badge, and a category filter applied **by the server** rather than over the list on screen (DN-025)
+- **Class detail** (DN-012) — the class and the recipes it teaches, with a buy button whose
+  behaviour follows the purchase state
+- **Recipe** (DN-021) — ingredients, method and video, modelled as a list of components so each part
+  of a recipe can be prepared separately
+- **Offline class schedule** (DN-036) — upcoming in-person classes out to the end of next month,
+  by month, with availability shown as a phrase and a colour rather than colour alone
 - **Three purchase states, not two** — bought, awaiting verification, not bought. The middle one
   deliberately shows *no* buy button: someone who has already transferred money and is shown one may
   conclude the transfer failed and send it twice
 - **Locked recipes are inert rather than hidden** — and their ingredients, method and video were
   never sent by the server, so `purchaseStatus` is a hint, never a gate
 
-Not built yet: the real recipe screen (currently a placeholder), video playback, payment, and any
-notion of a signed-in user.
+Not built yet: video playback, payment, and **any notion of a signed-in user** — the login screen
+above is the visible half of that gap and closes none of it.
+
+**Light mode and portrait only** (DN-039), enforced in all four build configurations. A screen
+designed for dark mode is wasted work, and nothing rotates.
+
+*Screens are listed with the ticket that built them and no count, deliberately — a number here goes
+stale on the next merge and nothing forces anyone to update it.*
 
 **There is no backend.** The app runs on `DNDataLayer.stub()`, which replays the approved contract
 fixtures through the library's real decoding path.
@@ -79,10 +93,14 @@ they must be quoted:
 
 ```sh
 xcodebuild -list -project DapurNaura.xcodeproj
+xcrun simctl list devices available          # get the simulator's id
 
 xcodebuild -project DapurNaura.xcodeproj -scheme "DapurNaura Dev" \
-  -destination 'platform=iOS Simulator,name=iPad (A16)' build
+  -destination 'platform=iOS Simulator,id=<simulator-uuid>' build
 ```
+
+**Every change to this project is built before it is offered for review** — build only, no simulator
+run, and `** BUILD SUCCEEDED **` or it is not finished (DN-034).
 
 | Variant | Backend | Logging | Audience |
 | --- | --- | --- | --- |
@@ -93,9 +111,11 @@ xcodebuild -project DapurNaura.xcodeproj -scheme "DapurNaura Dev" \
 
 Alpha is the earlier, less stable tier; Beta comes after it.
 
-⚠️ Name a **concrete Apple-silicon simulator** in `-destination`. The XCFramework has no x86_64
-slice, so `generic/platform=iOS Simulator` fails on the x86_64 pass even though arm64 builds
-cleanly.
+⚠️ **Pass the simulator's `id`, never a bare device name.** The XCFramework has no x86_64 slice, so
+`generic/platform=iOS Simulator` fails on the x86_64 pass even though arm64 builds cleanly — and
+several runtimes publish the same device *name* for both architectures, so `name=iPhone 16 Pro` is
+ambiguous and makes `xcodebuild` print the device list instead of building. See known issue 2 in
+[`CLAUDE.md`](CLAUDE.md).
 
 ## Requirements
 
