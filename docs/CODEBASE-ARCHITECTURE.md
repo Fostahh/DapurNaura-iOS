@@ -105,6 +105,7 @@ DapurNaura/
 └── Presentation/
     ├── Components/         # used by more than one feature
     ├── DesignConstants.swift
+    ├── DesignConstants+<Area>.swift   # same enum, split only on SwiftLint's 200-line limit
     └── <Feature>/          # one folder per screen
         ├── <Feature>View.swift
         ├── <Feature>ViewModel.swift
@@ -248,6 +249,15 @@ document — it was established by DN-012 and lived only in a commit message unt
   layer's §1.
 - Views receive a factory, never the data layer and never a repository.
 - Swapping `DNDataLayer.stub()` for the live `DNDataLayer(config:)` happens here and nowhere else.
+- **It also chooses which screen is the root** (DN-040): login, or the app behind it. That is a root
+  *swap*, not a push — the login screen cannot be returned to, and a hidden back button would still
+  leave a back gesture.
+
+> **`hasPassedLogin` is not a session, and nothing may treat it as one.** It is a `@State` boolean
+> meaning *this launch has been past a screen*. No credential is checked, nothing is stored, and it
+> dies with the process — which is why every launch starts at login. The signed-in-user gap is the
+> owner's deferral of 2026-08-06 and is entirely unclosed; when identity does arrive it does **not**
+> arrive as this flag.
 
 ## 6. Crossing the SKIE boundary
 

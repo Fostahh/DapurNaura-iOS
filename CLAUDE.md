@@ -21,10 +21,24 @@ Browse **cooking classes** (*kelas*) → open one to see its **recipes** → ope
 ingredients (*bahan-bahan*), the step-by-step method, and a how-to video. Content is Bahasa
 Indonesia. Audience is people learning to cook.
 
-**Three screens exist:** the cooking-class list (DN-009, with a category filter added by DN-025), the
-class detail (DN-012) and the recipe screen (DN-021 — ~~a placeholder~~ replaced with the real thing),
-all fed by `DNLibrary`'s `DNDataLayer.stub()` (contract replay; no backend exists yet). Everything
-else — video, payment, any notion of a signed-in user — is still to build.
+**The screens, in the order a user meets them:** login (DN-040), the Kelas Online / Kelas Offline
+choice the app opens onto (DN-033), the cooking-class list with its category filter (DN-009, DN-025),
+the class detail (DN-012), the recipe screen (DN-021 — ~~a placeholder~~ replaced with the real
+thing), and the offline class schedule (DN-036). Everything fetched comes from `DNLibrary`'s
+`DNDataLayer.stub()` (contract replay; no backend exists yet). Video and payment are still to build.
+
+**No number is given here on purpose** — a screen count goes stale on the next merge and nothing
+forces anyone to update it. `../../docs/tickets/README.md` is derived and correct.
+
+**The login screen authenticates nobody** (DN-040). Any email and any password get in; the only gate
+is that neither box is empty. There is no session, no user model and nowhere to keep a token, and
+`hasPassedLogin` in `DapurNauraApp` is a `@State` boolean meaning *this launch has been past a
+screen* — **not** something to hang a user id on. The signed-in-user gap is unchanged and still the
+owner's deferral of 2026-08-06.
+
+**The app is light-mode only and portrait only** (DN-039), set through
+`INFOPLIST_KEY_UIUserInterfaceStyle` and the orientation keys in all four build configurations. Build
+screens for light; a design that only works in dark mode is wasted work, and nothing rotates.
 
 **The class list filters by category on the server.** Choosing a chip is a new
 `getCookingClasses(category:)` request, not a predicate over the list already on screen, so the chip
