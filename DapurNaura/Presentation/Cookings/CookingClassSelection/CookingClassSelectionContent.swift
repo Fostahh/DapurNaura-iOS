@@ -2,20 +2,11 @@
 //  CookingClassSelectionContent.swift
 //  DapurNaura
 //
-//  DN-033 — the two choices, buildable from nothing (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 09/08/26.
 //
 
 import SwiftUI
 
-/// The Kelas Online / Kelas Offline choice.
-///
-/// **The two cards are written out, not iterated.** A `ClassKind` enum carrying
-/// Indonesian labels would be a domain enum worded in Swift, which is what DN-026
-/// took out of `PurchaseStatusBadge`. These are not two values of one type — they
-/// are two things that do two different things, and a two-element array plus a
-/// `switch` to decide which is longer than both branches written plainly.
-///
-/// Screen level, so it may name `Route` (§3). `ClassKindCard` may not.
 struct CookingClassSelectionContent: View {
     var body: some View {
         ScrollView {
@@ -30,8 +21,6 @@ struct CookingClassSelectionContent: View {
                 }
                 .buttonStyle(.plain)
 
-                // DN-036: this used to raise a "Segera Hadir" notice. It now pushes the real
-                // schedule, so both cards are links and neither is a special case.
                 NavigationLink(value: Route.offlineClasses(.schedule)) {
                     ClassKindCard(
                         imageURL: "https://placehold.co/300x300/png?text=Kelas+Offline",

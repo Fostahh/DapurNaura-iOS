@@ -2,7 +2,7 @@
 //  OfflineClassRow.swift
 //  DapurNaura
 //
-//  DN-036 — one class as a ticket, following the owner's reference.
+//  Created by Mohammad Azri Khairuddin on 10/08/26.
 //
 
 import SwiftUI

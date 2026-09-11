@@ -2,7 +2,7 @@
 //  ToastKind.swift
 //  DapurNaura
 //
-//  DN-040 — the three kinds of toast the owner specified (2026-08-10).
+//  Created by Mohammad Azri Khairuddin on 11/08/26.
 //
 
 import Foundation

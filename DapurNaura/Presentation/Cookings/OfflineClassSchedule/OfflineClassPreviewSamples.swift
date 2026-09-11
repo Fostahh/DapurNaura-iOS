@@ -2,20 +2,12 @@
 //  OfflineClassPreviewSamples.swift
 //  DapurNaura
 //
-//  DN-036 — sample data for #Preview only (ARCHITECTURE §3: every state must be previewable).
+//  Created by Mohammad Azri Khairuddin on 10/08/26.
 //
 
 import Foundation
 import DNLibrary
 
-/// Offline classes for previews, and nothing else.
-///
-/// §3 requires every state of a screen to be previewable, and `DNDataLayer.stub()` cannot answer
-/// that here: it never fails, and its dates are fixed to one window — so *failed*, *empty* and
-/// *a month where every class is full* are all unreachable through it. Building the models by hand
-/// is what makes those visible before a device.
-///
-/// A type rather than a bare extension so the file obeys §3's *file name equals type name*.
 enum OfflineClassPreviewSamples {
 
     static func offlineClass(
@@ -43,7 +35,6 @@ enum OfflineClassPreviewSamples {
         )
     }
 
-    /// One month holding all three availability states, which is the row set worth looking at.
     static func september() -> OfflineClassMonth {
         OfflineClassMonth(
             year: 2026,
@@ -56,7 +47,6 @@ enum OfflineClassPreviewSamples {
         )
     }
 
-    /// A month where nothing can be joined — the case whose section shows no number at all.
     static func august() -> OfflineClassMonth {
         OfflineClassMonth(
             year: 2026,

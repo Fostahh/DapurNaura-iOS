@@ -2,7 +2,7 @@
 //  OfflineClassAvailabilityBadge.swift
 //  DapurNaura
 //
-//  DN-036 — whether a place is left, in words and in colour.
+//  Created by Mohammad Azri Khairuddin on 10/08/26.
 //
 
 import SwiftUI

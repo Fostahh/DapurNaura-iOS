@@ -2,7 +2,7 @@
 //  RemoteImage.swift
 //  DapurNaura
 //
-//  DN-015 — the AsyncImage block was written out four times across three files.
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import SwiftUI

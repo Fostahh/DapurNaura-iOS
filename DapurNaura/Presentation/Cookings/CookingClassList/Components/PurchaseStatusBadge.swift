@@ -2,7 +2,7 @@
 //  PurchaseStatusBadge.swift
 //  DapurNaura
 //
-//  DN-015 — extracted out of CookingClassListView (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import SwiftUI

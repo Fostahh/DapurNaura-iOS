@@ -2,7 +2,7 @@
 //  CookingClassDetailViewModel.swift
 //  DapurNaura
 //
-//  DN-012 — MVVM: the view renders `state`, and nothing here imports SwiftUI.
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import Foundation
@@ -39,12 +39,7 @@ final class CookingClassDetailViewModel {
                 state = .failed(DNErrorKt.userMessage(failure.error))
             }
         } catch is CancellationError {
-            // The screen is going away; leave state untouched.
         } catch {
-            // The use case returns sealed results, so this should be unreachable.
-            // But `state` is already .loading by this point: swallowing the error
-            // would strand the screen on a spinner with no retry, which is a worse
-            // failure than an honest message.
             state = .failed(DNErrorKt.userMessage(DNErrorUnknown(message: nil)))
         }
     }

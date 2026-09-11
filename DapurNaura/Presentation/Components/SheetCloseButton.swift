@@ -2,7 +2,7 @@
 //  SheetCloseButton.swift
 //  DapurNaura
 //
-//  DN-036 — extracted out of NoticeSheet (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 10/08/26.
 //
 
 import SwiftUI

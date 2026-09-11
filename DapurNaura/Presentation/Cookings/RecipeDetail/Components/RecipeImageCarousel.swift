@@ -2,7 +2,7 @@
 //  RecipeImageCarousel.swift
 //  DapurNaura
 //
-//  DN-021 — a recipe carries more than one picture (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 07/08/26.
 //
 
 import SwiftUI

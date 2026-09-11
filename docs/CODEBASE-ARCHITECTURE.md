@@ -145,6 +145,26 @@ schedule). Every screen lives in one of them.
   anticipation of one.
 - **File name must equal the type name.** SwiftLint's `file_name` rule is not enabled — this one is
   on review, and three files had drifted before DN-015.
+- **The file header is Xcode's, unchanged. Must.** Owner's rule, 2026-09-11 (DN-044):
+
+  ```swift
+  //
+  //  <Filename>.swift
+  //  DapurNaura
+  //
+  //  Created by Mohammad Azri Khairuddin on <dd/mm/yy>.
+  //
+  ```
+
+  **It is not a place to describe the file.** Fifty-three files had grown a `DN-XXX — what this is`
+  line in place of the attribution, which is a summary nothing keeps true and which duplicates the
+  ticket. The date is the file's real creation date; where a file already carries a correct header,
+  that date is evidence and is not recomputed.
+- **Prose comments are not required anywhere, and were removed from everything outside
+  `Components/`** (DN-044). Rationale belongs in the ticket that decided it — that is what Document
+  Driven Development is for, and a second copy in the source is one nothing keeps in sync. Comments
+  that remain must still be English (§8). **`Components/` was excluded by the owner** and keeps its
+  documentation.
 - **No junk-drawer folder.** A folder named for what its contents are *not* — `Helper/`, `Utils/`,
   `Misc/` — attracts everything nobody classified. `Helper/` existed here until DN-016 emptied it,
   and is not to come back. Anything that would go in one either belongs to a feature, is shared and

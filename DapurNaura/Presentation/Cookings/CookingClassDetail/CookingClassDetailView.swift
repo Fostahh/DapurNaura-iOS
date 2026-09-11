@@ -2,8 +2,7 @@
 //  CookingClassDetailView.swift
 //  DapurNaura
 //
-//  DN-012 — one class and the recipes it teaches. Content is Bahasa Indonesia.
-//  Layout is the agent's, delegated by the owner in the requirement.
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import SwiftUI

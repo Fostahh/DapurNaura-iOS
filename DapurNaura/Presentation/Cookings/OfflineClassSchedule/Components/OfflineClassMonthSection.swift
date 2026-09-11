@@ -2,7 +2,7 @@
 //  OfflineClassMonthSection.swift
 //  DapurNaura
 //
-//  DN-036 — one month, openable and closable.
+//  Created by Mohammad Azri Khairuddin on 10/08/26.
 //
 
 import SwiftUI

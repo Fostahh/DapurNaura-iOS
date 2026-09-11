@@ -2,7 +2,7 @@
 //  RecipeDetailContent.swift
 //  DapurNaura
 //
-//  DN-021 — buildable from state alone, so every state is previewable (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 07/08/26.
 //
 
 import SwiftUI
@@ -31,9 +31,6 @@ struct RecipeDetailContent: View {
                     Text(recipe.name)
                         .font(.title2.bold())
 
-                    // Two separate values, never merged — and either may legitimately be absent.
-                    // An absent one draws nothing at all rather than an empty row: this recipe
-                    // genuinely has no portions, and its class is bought.
                     if recipe.portions != nil || recipe.loyang != nil {
                         VStack(alignment: .leading, spacing: 4) {
                             if let portions = recipe.portions {
@@ -147,7 +144,6 @@ private let topingComponent = RecipeComponent(
     }
 }
 
-// One component, no heading — the shape a recipe with no natural split takes.
 #Preview("Satu komponen tanpa judul") {
     NavigationStack {
         RecipeDetailContent(
