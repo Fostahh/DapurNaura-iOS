@@ -138,6 +138,22 @@ accessor to `DapurNauraAppConfig` instead.
 happened and the literal `$(API_KEY)` is left in the plist — otherwise a missing config surfaces as
 a confusing 401 rather than a clear error.
 
+### Permissions — the app declares exactly one
+
+**`NSCameraUsageDescription`, in all four build configurations** (DN-046), so a user can photograph a
+paper receipt as proof of payment. It sits in the build settings beside DN-039's orientation and
+appearance keys, for the reason DN-039 established: `Info.plist` is overwritten by the generated
+keys, and an xcconfig is overridden at target level.
+
+**Nothing else is declared, and that is deliberate.** Choosing an image from the photo library uses
+`PhotosPicker`, which runs out of process and returns only what the user picked — so the app never
+holds library access and **`NSPhotoLibraryUsageDescription` must not be added.** Declaring a
+permission the app does not use asks users for something it never needs, and App Review notices.
+
+**Missing this key does not fail politely.** iOS terminates the process the moment the camera is
+opened without one — no dialog, no error, no crash log that names the cause. It is the kind of thing
+that only shows up on the one code path that uses it.
+
 ### The layout is deliberately flat
 
 Five files, one level of `#include`:
