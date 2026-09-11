@@ -104,15 +104,37 @@ DapurNaura/
 ├── Config/                 # xcconfig — target membership OFF, see CLAUDE.md
 └── Presentation/
     ├── Components/         # used by more than one feature
-    ├── DesignConstants.swift
-    ├── DesignConstants+<Area>.swift   # same enum, split only on SwiftLint's 200-line limit
-    └── <Feature>/          # one folder per screen
-        ├── <Feature>View.swift
-        ├── <Feature>ViewModel.swift
-        ├── <Destination>Route.swift
-        └── Components/     # used by this feature only
+    ├── Constants/          # DesignConstants + its per-area extensions
+    └── <Flow>/             # a flow module — one presentation context (DN-043)
+        ├── <Flow>FlowView.swift    # owns this flow's NavigationStack
+        └── <Feature>/              # one folder per screen
+            ├── <Feature>View.swift
+            ├── <Feature>ViewModel.swift
+            ├── <Destination>Route.swift
+            └── Components/         # used by this feature only
 ```
 
+Two flows exist: **`Auth/`** (login today; onboarding, forgotten passwords and registration expected
+to push within it) and **`Cookings/`** (the class selection, list, detail, recipe and offline
+schedule). Every screen lives in one of them.
+
+- **A flow module owns exactly one `NavigationStack`, in a `<Flow>FlowView`. Must.** The screens
+  inside it own none. That is what lets `RootView` swap one flow for another without either knowing
+  the other exists, and what makes the swap destroy a flow's stack with it.
+
+  **The test is the stack, not the topic.** A folder earns this tier by being a presentation context
+  — entered by a root swap or a modal — never by collecting related subject matter. **Grouping by
+  theme is the atomic-design mistake below wearing a different hat.**
+
+  **The flow view must be its own type, not the flow's first screen.** DN-043 separated them for a
+  reason with two instances behind it: the main stack sat on `CookingClassListView`, moved to
+  `CookingClassSelectionView` when DN-033 changed which screen came first, and would have moved again
+  the next time. A stack hosted by whichever screen happens to be root migrates every time that
+  changes, and drags the `navigationDestination` with it.
+- **`Constants/` is not a junk drawer**, and the distinction is the test §3 already applies
+  elsewhere: it is named for what it *holds*, not for what its contents are not. Only
+  `DesignConstants` and its per-area extensions belong there — the split exists solely for
+  SwiftLint's 200-line limit (§9). Anything else that lands in it has been misfiled.
 - **A component folder is named `Components/` at both scopes**, and the two are told apart by
   *where they sit*, not by what they are called. **Do not introduce atomic-design tiers**
   (`Atom/`, `Molecule/`, `Organism/`). "Which folder does this go in" must have a factual answer —
@@ -152,6 +174,37 @@ enum Route: Hashable {
   **always rendered** — never inside a `switch` over view state. A destination registered inside a
   conditional branch deregisters when that branch disappears, and any pushed screen is torn down.
   This is a defect that has already occurred here.
+
+  **One registration per route *type*, per stack** (DN-043). A flow module owning its own
+  `NavigationStack` registers its own destination for its own route type; `Route` stays the main
+  flow's alone. Two registrations for the *same* type in one stack is the defect above.
+
+### Three mechanisms, and they are not interchangeable
+
+A screen changes in one of three ways, chosen by **what should happen to the screen being left**:
+
+| | Mechanism | The screen you left | Used for |
+|---|---|---|---|
+| **Swap** | `router.root` changes | **destroyed**, and its stack with it | auth ↔ main |
+| **Push** | `path.append(route)` | alive underneath; back returns to it | everything inside a flow |
+| **Present** | `.sheet` / `.fullScreenCover` | alive underneath; dismissal returns to it | a self-contained interruption |
+
+- **A flow owns exactly one `NavigationStack`, and flows compose by swap or by present — never by
+  nesting. Must.** SwiftUI supports one stack per presentation context; a `NavigationStack` inside
+  another produces duplicated or missing navigation bars, toolbars attaching to the wrong stack, and
+  a back gesture fighting itself. Where UIKit would present a second `UINavigationController`, this
+  app swaps the root or presents a cover. **Pushing a stack inside a stack is the one arrangement
+  that is simply wrong**, not a trade-off to weigh.
+- **`RootRoute` lists only what *replaces* the screen.** `.auth`, `.main`, and realistically one day
+  `.onboarding`. Most features are pushes and belong in `Route`; a checkout is a present. Reaching
+  for a fifth root case is a strong sign the thing being added is really a push.
+- **The swap must be wrapped in `withAnimation`, from inside a `View`.** `RootView` exists precisely
+  because an `App` is not one: `withAnimation` installs a transaction on the view update cycle, and
+  state owned by a `Scene` re-evaluates the scene body without carrying it across — so `.transition`
+  on the root silently degrades to an instant cut. That was DN-043's defect, and it shipped.
+- **Where a swap leaves a screen holding the keyboard, dismiss it and let it finish first.** Two
+  system animations competing for one moment read as a wobble, not a transition. `LoginView.submit()`
+  is the worked example.
 - **`NavigationLink(value:)` is the only permitted form.** `NavigationLink { destination } label: {}`
   is forbidden. Mixing the two in one `NavigationStack` causes SwiftUI to lose destinations. This is
   also a defect that has already occurred here.
@@ -187,18 +240,36 @@ to force `AnyView`.
 @MainActor
 @Observable
 final class DapurNauraAppRouter {
-    var path: [Route] = []
+    var root: RootRoute = .auth   // which flow is on screen (DN-043)
+    var path: [Route] = []        // the main flow's stack
 }
 ```
 
-Held as `@State` on `DapurNauraApp`, injected with `.environment(router)`, and bound by the root
-stack as `NavigationStack(path: $router.path)`. A **View** may push. A **ViewModel must not** — it
-has no business knowing screens exist. Where navigation must follow async work, the View observes
-the ViewModel's state and pushes; the ViewModel does not reach for the router.
+Held as `@State` on `DapurNauraApp`, injected with `.environment(router)`, and bound by the main
+flow's stack as `NavigationStack(path: $router.path)`. A **View** may push. A **ViewModel must
+not** — it has no business knowing screens exist. Where navigation must follow async work, the View
+observes the ViewModel's state and pushes; the ViewModel does not reach for the router.
 
-**The router is the array and nothing else.** `NavigationLink(value:)` appends and the back button
-removes, so `push(_:)` and `popToRoot()` would have no callers — and a convenience method nothing
-calls is worse than none, because the next screen copies it. Add one when a caller exists.
+**Not every path belongs here (DN-043).** A flow's path lives on the router only if it must
+**survive** something, or be **reached from outside** the view that draws it:
+
+| Path | Lives | Why |
+|---|---|---|
+| `root` | router | reachability — a logout control, or a 401 handler once a backend exists, must force `.auth` from outside `RootView` |
+| `path` — the `Cookings` flow | router, bound by `CookingsFlowView` | deep links, state restoration, pop-to-root after a purchase |
+| the `Auth` flow's path | `@State` in `AuthFlowView` | neither applies — nobody deep-links into a half-finished registration |
+
+**The two flows differing here is the rule working, not an inconsistency.** Each path sits where its
+own consumers put it.
+
+**Prefer `@State` in the flow, and make the router justify itself.** A path outliving the stack it
+describes is a stale array someone has to remember to clear. Holding the auth path locally is what
+turns *"login cannot be returned to"* from a rule into a property of the structure: the swap destroys
+the view, and the stack goes with it.
+
+**The router is otherwise the arrays and nothing else.** `NavigationLink(value:)` appends and the
+back button removes, so `push(_:)` and `popToRoot()` would have no callers — and a convenience method
+nothing calls is worse than none, because the next screen copies it. Add one when a caller exists.
 
 **Be honest about what it earns today: nothing.** Navigation is driven by `NavigationLink(value:)`,
 and only `NavigationStack` reads `path`. The router is here because deep links, state restoration and

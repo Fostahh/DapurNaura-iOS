@@ -32,9 +32,10 @@ forces anyone to update it. `../../docs/tickets/README.md` is derived and correc
 
 **The login screen authenticates nobody** (DN-040). Any email and any password get in; the only gate
 is that neither box is empty. There is no session, no user model and nowhere to keep a token, and
-`hasPassedLogin` in `DapurNauraApp` is a `@State` boolean meaning *this launch has been past a
-screen* — **not** something to hang a user id on. The signed-in-user gap is unchanged and still the
-owner's deferral of 2026-08-06.
+`router.root` is a two-case `RootRoute` meaning *which flow is on screen* — **not** something to hang
+a user id on. DN-043 replaced DN-040's `hasPassedLogin` boolean with it; that moved where the flag
+lives, not what it means, and it is still not persisted. The signed-in-user gap is unchanged and
+still the owner's deferral of 2026-08-06.
 
 **The app is light-mode only and portrait only** (DN-039), set through
 `INFOPLIST_KEY_UIUserInterfaceStyle` and the orientation keys in all four build configurations. Build
@@ -56,6 +57,11 @@ The entry points worth naming:
 - **`DapurNaura/App/DapurNauraApp.swift`** — `@main` and the **composition root**: builds
   `DNDataLayer.stub()`, constructs the `ViewModelFactory` and owns the `DapurNauraAppRouter`.
   Swapping stub → live `DNDataLayer(config:)` happens here, and only here, when a backend exists.
+- **`DapurNaura/App/RootView.swift`** — which flow is on screen, and the animated swap between them
+  (DN-043). **It is a `View` rather than code inside `DapurNauraApp` for a load-bearing reason:**
+  `withAnimation` around state owned by an `App` animates nothing, because the transaction does not
+  cross the `Scene` boundary into the `WindowGroup`'s content. That defect shipped once already.
+  **Do not move this back up.**
 - **`DapurNaura/App/DapurNauraAppConfig.swift`** — reads build-variant values out of `Info.plist`, see
   [Build variants](#build-variants). **Still uncalled** — the stub path needs no URL or key. Its
   first caller is the live-backend switch, which must also replace the stale RAWG `API_BASE_URL`
