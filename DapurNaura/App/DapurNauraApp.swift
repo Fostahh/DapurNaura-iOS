@@ -15,10 +15,13 @@ struct DapurNauraApp: App {
 
     @State private var router = DapurNauraAppRouter()
 
+    @State private var toasts = ToastCenter()
+
     var body: some Scene {
         WindowGroup {
             RootView(factory: factory)
                 .environment(router)
+                .environment(toasts)
         }
     }
 }

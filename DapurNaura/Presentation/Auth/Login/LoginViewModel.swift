@@ -13,20 +13,8 @@ final class LoginViewModel {
     var email = ""
     var password = ""
 
-    private(set) var toast: ToastMessage?
-
-    func attemptLogin() -> Bool {
-        guard let complaint = emptyFieldComplaint else {
-            toast = nil
-            return true
-        }
-
-        toast = ToastMessage(kind: .error, text: complaint)
-        return false
-    }
-
-    func dismissToast() {
-        toast = nil
+    func attemptLogin() -> String? {
+        emptyFieldComplaint
     }
 
     private var emptyFieldComplaint: String? {

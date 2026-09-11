@@ -39,8 +39,12 @@ What runs today, against stub data, in the order a user meets it:
 - **Locked recipes are inert rather than hidden** — and their ingredients, method and video were
   never sent by the server, so `purchaseStatus` is a hint, never a gate
 
-Not built yet: video playback, payment, and **any notion of a signed-in user** — the login screen
-above is the visible half of that gap and closes none of it.
+- **Paying for a class** (DN-048) — a choice of bank accounts, copy the number, then upload a
+  photograph of the transfer receipt. **Nothing is sent yet**: there is no API call, so the class
+  still reads *Belum Dibeli* afterwards and a toast is what confirms the proof was taken
+
+Not built yet: video playback, the upload itself, and **any notion of a signed-in user** — the
+login screen above is the visible half of that gap and closes none of it.
 
 **Light mode and portrait only** (DN-039), enforced in all four build configurations. A screen
 designed for dark mode is wasted work, and nothing rotates.

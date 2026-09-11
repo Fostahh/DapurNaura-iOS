@@ -24,8 +24,14 @@ Indonesia. Audience is people learning to cook.
 **The screens, in the order a user meets them:** login (DN-040), the Kelas Online / Kelas Offline
 choice the app opens onto (DN-033), the cooking-class list with its category filter (DN-009, DN-025),
 the class detail (DN-012), the recipe screen (DN-021 — ~~a placeholder~~ replaced with the real
-thing), and the offline class schedule (DN-036). Everything fetched comes from `DNLibrary`'s
-`DNDataLayer.stub()` (contract replay; no backend exists yet). Video and payment are still to build.
+thing), the offline class schedule (DN-036), and the two payment screens the buy button now opens
+(DN-048). Everything fetched comes from `DNLibrary`'s `DNDataLayer.stub()` (contract replay; no
+backend exists yet). Video is still to build.
+
+**The payment screens do not complete a payment**, and that is deliberate (DN-048). They show the
+bank accounts, copy an account number, and take a photograph of the transfer receipt — then send
+nothing, because there is no API and no signed-in user to attribute a payment to. The class still
+reads *Belum Dibeli* afterwards. **Do not add a local flag to make it look finished.**
 
 **No number is given here on purpose** — a screen count goes stale on the next merge and nothing
 forces anyone to update it. `../../docs/tickets/README.md` is derived and correct.
@@ -55,7 +61,8 @@ repeated here.
 The entry points worth naming:
 
 - **`DapurNaura/App/DapurNauraApp.swift`** — `@main` and the **composition root**: builds
-  `DNDataLayer.stub()`, constructs the `ViewModelFactory` and owns the `DapurNauraAppRouter`.
+  `DNDataLayer.stub()`, constructs the `ViewModelFactory` and owns the app's two environment
+  objects — the `DapurNauraAppRouter` and the `ToastCenter` (DN-048).
   Swapping stub → live `DNDataLayer(config:)` happens here, and only here, when a backend exists.
 - **`DapurNaura/App/RootView.swift`** — which flow is on screen, and the animated swap between them
   (DN-043). **It is a `View` rather than code inside `DapurNauraApp` for a load-bearing reason:**

@@ -35,6 +35,10 @@ struct ViewModelFactory {
         RecipeDetailViewModel(recipeId: recipeId, getRecipe: dataLayer.getRecipe)
     }
 
+    func makePaymentDestination() -> PaymentDestinationViewModel {
+        PaymentDestinationViewModel(getPaymentDestinations: dataLayer.getPaymentDestinations)
+    }
+
     func makeOfflineClassSchedule() -> OfflineClassScheduleViewModel {
         OfflineClassScheduleViewModel(
             getOfflineClassSchedule: dataLayer.getOfflineClassSchedule
