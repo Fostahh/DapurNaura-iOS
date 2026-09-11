@@ -2,16 +2,12 @@
 //  CookingClassDetailContent.swift
 //  DapurNaura
 //
-//  DN-015 — buildable from state alone, so every state is previewable (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import SwiftUI
 import DNLibrary
 
-/// The class detail's three states.
-///
-/// Takes `state` rather than the ViewModel, so a `#Preview` can pin any state
-/// exactly — including the failure, which the stub data layer never produces.
 struct CookingClassDetailContent: View {
     let state: CookingClassDetailViewModel.State
     let onRetry: () -> Void
@@ -41,8 +37,6 @@ private func previewDetail(status: PurchaseStatus, locked: Bool) -> CookingClass
         currency: "IDR",
         purchaseStatus: status,
         recipes: [
-            // portions and loyang are nil when the class is not bought — absent,
-            // not blank, so "locked" stays distinguishable from "no value".
             RecipeSummary(
                 id: "11",
                 name: "Brownies",

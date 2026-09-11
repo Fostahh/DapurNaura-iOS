@@ -2,7 +2,7 @@
 //  CategoryFilterChips.swift
 //  DapurNaura
 //
-//  DN-025 — the class list's category filter.
+//  Created by Mohammad Azri Khairuddin on 08/08/26.
 //
 
 import SwiftUI

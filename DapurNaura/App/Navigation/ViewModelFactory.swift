@@ -2,20 +2,12 @@
 //  ViewModelFactory.swift
 //  DapurNaura
 //
-//  DN-015 — the single hand-wired object graph (ARCHITECTURE §5).
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import Foundation
 import DNLibrary
 
-/// Builds every screen's view model.
-///
-/// `DapurNauraApp` constructs this once and hands it down, so it remains the only
-/// place that knows a `DNDataLayer` exists. Views receive the factory, never the
-/// data layer and never a use case.
-///
-/// This replaces the per-screen closures DN-012 introduced. One closure worked;
-/// three threaded through intermediate views did not.
 @MainActor
 struct ViewModelFactory {
     private let dataLayer: DNDataLayer
@@ -24,10 +16,6 @@ struct ViewModelFactory {
         self.dataLayer = dataLayer
     }
 
-    /// DN-040. **Injects nothing, and that is the point of it being here anyway**: login checks
-    /// only that two boxes are filled, so there is no use case yet. Keeping construction in the
-    /// factory means the day authentication becomes real, the wiring already has a home and no
-    /// call site moves.
     func makeLogin() -> LoginViewModel {
         LoginViewModel()
     }

@@ -2,7 +2,7 @@
 //  IngredientRow.swift
 //  DapurNaura
 //
-//  DN-021 — one ingredient: how much, what, and which brand.
+//  Created by Mohammad Azri Khairuddin on 07/08/26.
 //
 
 import SwiftUI

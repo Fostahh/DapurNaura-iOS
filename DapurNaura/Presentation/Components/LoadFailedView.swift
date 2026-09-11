@@ -2,7 +2,7 @@
 //  LoadFailedView.swift
 //  DapurNaura
 //
-//  DN-015 — every screen fails the same way (ARCHITECTURE §7).
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import SwiftUI

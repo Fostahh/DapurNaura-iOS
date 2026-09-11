@@ -2,13 +2,12 @@
 //  OfflineClassScheduleContent.swift
 //  DapurNaura
 //
-//  DN-036 — buildable from state alone, so every state is previewable (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 10/08/26.
 //
 
 import SwiftUI
 import DNLibrary
 
-/// The schedule's three states, plus the empty one.
 struct OfflineClassScheduleContent: View {
     let state: OfflineClassScheduleViewModel.State
     let isCollapsed: (String) -> Bool
@@ -26,9 +25,6 @@ struct OfflineClassScheduleContent: View {
             LoadFailedView(message: message, retry: onRetry)
 
         case .loaded(let months) where months.isEmpty:
-            // The owner ruled out an unpublished schedule as a business case, so this is a
-            // fallback rather than a feature: a month can still empty as its last class passes,
-            // and a blank screen with no explanation is the alternative (§7).
             ContentUnavailableView {
                 Label("Belum Ada Jadwal", systemImage: "calendar")
             } description: {
@@ -55,11 +51,6 @@ struct OfflineClassScheduleContent: View {
 }
 
 extension OfflineClassMonth {
-    /// Identity for `ForEach` and for the collapsed set.
-    ///
-    /// Built from the year and the month's own name rather than an array index: a month keeps its
-    /// identity across a reload, so a section the reader folded stays folded when the list comes
-    /// back — which is the whole reason the collapsed set lives in the ViewModel.
     var id: String { "\(year)-\(month.name)" }
 }
 

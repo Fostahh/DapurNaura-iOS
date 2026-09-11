@@ -2,7 +2,7 @@
 //  RecipeDetailViewModel.swift
 //  DapurNaura
 //
-//  DN-021 — MVVM: the view renders `state`, and nothing here imports SwiftUI.
+//  Created by Mohammad Azri Khairuddin on 07/08/26.
 //
 
 import Foundation
@@ -39,9 +39,7 @@ final class RecipeDetailViewModel {
                 state = .failed(DNErrorKt.userMessage(failure.error))
             }
         } catch is CancellationError {
-            // The screen is going away; leave state untouched.
         } catch {
-            // The use case returns sealed results, so this should be unreachable.
             state = .failed(DNErrorKt.userMessage(DNErrorUnknown(message: nil)))
         }
     }

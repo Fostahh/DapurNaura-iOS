@@ -2,7 +2,7 @@
 //  LoginTextField.swift
 //  DapurNaura
 //
-//  DN-040 — the app's first text field.
+//  Created by Mohammad Azri Khairuddin on 11/08/26.
 //
 
 import SwiftUI

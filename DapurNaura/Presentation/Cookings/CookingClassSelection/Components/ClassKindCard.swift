@@ -2,7 +2,7 @@
 //  ClassKindCard.swift
 //  DapurNaura
 //
-//  DN-033 — one of the two cards the app now opens on.
+//  Created by Mohammad Azri Khairuddin on 09/08/26.
 //
 
 import SwiftUI

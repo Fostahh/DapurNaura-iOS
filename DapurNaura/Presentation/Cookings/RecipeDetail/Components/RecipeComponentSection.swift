@@ -2,7 +2,7 @@
 //  RecipeComponentSection.swift
 //  DapurNaura
 //
-//  DN-021 — one part of a recipe: its bowl, then its method.
+//  Created by Mohammad Azri Khairuddin on 07/08/26.
 //
 
 import SwiftUI

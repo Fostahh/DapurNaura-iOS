@@ -2,8 +2,7 @@
 //  RecipeDetailView.swift
 //  DapurNaura
 //
-//  DN-021 — one recipe in full. Content is Bahasa Indonesia.
-//  Replaces the DN-012 placeholder wholesale.
+//  Created by Mohammad Azri Khairuddin on 07/08/26.
 //
 
 import SwiftUI

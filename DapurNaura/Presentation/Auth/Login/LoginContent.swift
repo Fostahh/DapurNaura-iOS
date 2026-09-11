@@ -2,20 +2,11 @@
 //  LoginContent.swift
 //  DapurNaura
 //
-//  DN-040 — the login screen's drawing, from plain values (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 11/08/26.
 //
 
 import SwiftUI
 
-/// Everything the login screen shows, built from two bindings and four closures — so it previews
-/// without a ViewModel, a use case or a `DNDataLayer` (§3).
-///
-/// **The spacing down to the Login button is the owner's (2026-08-10); below it is the agent's** —
-/// *"the other below, do as you wish."* All provisional, all in `DesignConstants` (§9).
-///
-/// The column sits in a `ScrollView`: the heading is placed as a fraction of the screen height, and
-/// this is the app's first screen with a keyboard, so a fixed layout would put the password field
-/// under it on a small phone. The resting appearance is unchanged.
 struct LoginContent: View {
     @Binding var email: String
     @Binding var password: String
@@ -84,8 +75,6 @@ struct LoginContent: View {
         .padding(.top, DesignConstants.loginFieldsTopPadding)
     }
 
-    /// Trailing-aligned as the design draws it — the owner's *"leading follows the password
-    /// textfield"* read as the two sharing margins, not as moving the text left.
     private var forgotPassword: some View {
         Button(action: onForgotPassword) {
             Text("Lupa Password?")
@@ -108,7 +97,6 @@ struct LoginContent: View {
         .padding(.horizontal, DesignConstants.loginHorizontalPadding)
     }
 
-    /// **No Google mark** — the owner supplies the asset later, so the label is text alone.
     private var googleButton: some View {
         Button(action: onGoogle) {
             filledLabel(
@@ -127,7 +115,6 @@ struct LoginContent: View {
             .font(.headline)
             .foregroundStyle(tint)
             .padding(.vertical, DesignConstants.rowSpacing)
-            // Same height as the two fields, from the same constant.
             .frame(maxWidth: .infinity, minHeight: DesignConstants.loginFieldMinHeight)
             .background(
                 RoundedRectangle(cornerRadius: DesignConstants.loginFieldCornerRadius, style: .continuous)

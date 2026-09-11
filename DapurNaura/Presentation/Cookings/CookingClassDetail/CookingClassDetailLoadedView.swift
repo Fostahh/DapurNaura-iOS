@@ -2,7 +2,7 @@
 //  CookingClassDetailLoadedView.swift
 //  DapurNaura
 //
-//  DN-015 — extracted out of CookingClassDetailView (ARCHITECTURE §3).
+//  Created by Mohammad Azri Khairuddin on 06/08/26.
 //
 
 import SwiftUI
@@ -30,20 +30,9 @@ struct CookingClassDetailLoadedView: View {
 
                 Divider()
 
-                // No recipe count here, by the owner's decision: the list below
-                // already shows every recipe the class contains, so a number adds
-                // nothing.
                 Text("Resep")
                     .font(.headline)
 
-                // DN-015: the screen decides the destination, not the row.
-                // `RecipeRow` renders and knows nothing about `Route` — recipes
-                // open only in a class the user has bought, and in every other
-                // state the row is inert. The ingredients, method and video are
-                // not merely hidden then; the server never sent them.
-                // DN-038: the branch is outside the loop. `isPurchased` is constant across every
-                // row, so testing it per recipe built a `_ConditionalContent` per recipe to reach
-                // an answer the whole list shares.
                 if isPurchased {
                     ForEach(detail.recipes, id: \.id) { recipe in
                         NavigationLink(
