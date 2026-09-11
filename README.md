@@ -60,7 +60,7 @@ fixtures through the library's real decoding path.
 | Pattern | MVVM — `@Observable` view models, `private(set)` state |
 | Concurrency | Swift Concurrency (`async`/`await`, `.task`) |
 | Data | [DNLibrary](https://github.com/Fostahh/DNLibrary) — Kotlin Multiplatform, consumed as a binary via [SPMDNLibrary](https://github.com/Fostahh/SPMDNLibrary) |
-| Navigation | `NavigationStack` bound to an owned `[Route]` path |
+| Navigation | One `NavigationStack` per flow, bound to an owned path; flows swapped at the root |
 | Configuration | `.xcconfig` per build variant |
 | Linting | SwiftLint, with custom rules enforcing this repo's architecture document |
 
