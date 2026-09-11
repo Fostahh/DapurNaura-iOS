@@ -13,7 +13,9 @@ import DNLibrary
 struct PurchaseSection: View {
     let detail: CookingClassDetail
 
-    @State private var purchaseUnavailableShown = false
+    /// Pressed when the user wants to pay. **A closure, not a `Route`** — §4 keeps route names at
+    /// screen level, and this is a section under `Components/`. The screen decides where it goes.
+    let onBuy: () -> Void
 
     var body: some View {
         switch detail.purchaseStatus {
@@ -36,20 +38,15 @@ struct PurchaseSection: View {
                 )
 
         case .notPurchased:
-            Button(action: showPurchaseUnavailable) {
+            // DN-048: this used to answer with "Pembelian lewat aplikasi belum tersedia." It now
+            // opens the payment flow. What the flow cannot yet do is record the payment — so a user
+            // who sends proof returns to this same button, and that is honest rather than broken.
+            Button(action: onBuy) {
                 Text("Beli Kelas · \(DNFormat.shared.rupiah(value: detail.price))")
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .alert("Belum Tersedia", isPresented: $purchaseUnavailableShown) {
-            } message: {
-                Text("Pembelian lewat aplikasi belum tersedia.")
-            }
         }
-    }
-
-    private func showPurchaseUnavailable() {
-        purchaseUnavailableShown = true
     }
 }

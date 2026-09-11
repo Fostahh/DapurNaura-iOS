@@ -94,6 +94,16 @@ force_try:
 # ---------------------------------------------------------------------------
 custom_rules:
 
+  # A toast is a View concern. Owner's rule, 2026-09-12 — "Toast is also a View, it shouldn't be in
+  # the ViewModel." Injection narrowed the hole a singleton left — a ViewModel has to be handed a
+  # ToastCenter now — but being handed one still names the type here, so the rule still catches it.
+  no_toast_in_viewmodel:
+    name: "Toast raised from a ViewModel"
+    regex: 'ToastCenter'
+    included: '.*ViewModel\.swift'
+    message: "A ViewModel does not raise toasts. Publish what happened — a validation message, a server message — and let the View decide that a toast is how it is said."
+    severity: error
+
   # §9 Design system — semantic fonts only.
   no_system_font:
     name: "Fixed font size"

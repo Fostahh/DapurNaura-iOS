@@ -9,6 +9,8 @@ import SwiftUI
 import DNLibrary
 
 struct CookingClassDetailLoadedView: View {
+    @Environment(DapurNauraAppRouter.self) private var router
+
     let detail: CookingClassDetail
 
     var body: some View {
@@ -26,7 +28,13 @@ struct CookingClassDetailLoadedView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                PurchaseSection(detail: detail)
+                PurchaseSection(detail: detail) {
+                    router.path.append(.payment(.destination(
+                        classId: detail.id,
+                        className: detail.name,
+                        price: detail.price
+                    )))
+                }
 
                 Divider()
 

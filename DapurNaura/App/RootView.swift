@@ -28,5 +28,6 @@ struct RootView: View {
                     .transition(.move(edge: .trailing))
             }
         }
+        .overlay(alignment: .top) { ToastHost() }
     }
 }

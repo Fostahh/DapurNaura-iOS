@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Environment(ToastCenter.self) private var toasts
+
     @State private var viewModel: LoginViewModel
 
     private let onLogin: () -> Void
@@ -30,9 +32,6 @@ struct LoginView: View {
             onGoogle: { noticeShown = true },
             onSignUp: { noticeShown = true }
         )
-        .overlay(alignment: .top) {
-            Toast(message: viewModel.toast, onDismiss: viewModel.dismissToast)
-        }
         .overlay {
             NoticeSheet(
                 isPresented: $noticeShown,
@@ -45,7 +44,12 @@ struct LoginView: View {
     }
 
     private func submit() {
-        guard viewModel.attemptLogin() else { return }
+        if let complaint = viewModel.attemptLogin() {
+            toasts.show(.error, complaint)
+            return
+        }
+
+        toasts.clear()
 
         UIApplication.shared.sendAction(
             #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
@@ -60,4 +64,5 @@ struct LoginView: View {
 
 #Preview {
     LoginView(viewModel: LoginViewModel(), onLogin: {})
+        .environment(ToastCenter())
 }

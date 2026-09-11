@@ -12,4 +12,5 @@ enum Route: Hashable {
     case classes(ClassRoute)
     case recipes(RecipeRoute)
     case offlineClasses(OfflineClassRoute)
+    case payment(PaymentRoute)
 }

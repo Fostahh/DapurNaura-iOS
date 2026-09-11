@@ -160,6 +160,22 @@ schedule). Every screen lives in one of them.
   line in place of the attribution, which is a summary nothing keeps true and which duplicates the
   ticket. The date is the file's real creation date; where a file already carries a correct header,
   that date is evidence and is not recomputed.
+- **No prose comments outside a `Components/` folder. Must.** Owner's rule, 2026-09-11 (DN-044) and
+  **restated 2026-09-12** after the same drift reappeared: *"please remove those unnecessary
+  comments."* Views, ViewModels, routes, content views and `Constants/` carry the Xcode header,
+  `// MARK:` dividers, and **nothing else** — no `///` doc comments, no explanatory `//` lines.
+
+  **Components are the exception, and only components.** `Presentation/Components/` and a feature's
+  own `Components/` folder may document what a component is for and how it is meant to be used,
+  because a component is read by people who did not write it. Everything else is read beside its
+  ticket.
+
+  **Why it keeps coming back, so the next agent does not repeat it:** an explanation feels free to
+  write and reads as diligence. It is neither — it is a second description of the code that nothing
+  forces anyone to update, and the ticket already carries the reasoning. **If a fact seems too
+  important to lose, it belongs in the ticket or in this document, not above the line it describes.**
+  A rule the compiler or SwiftLint can hold is better still: `no_toast_in_viewmodel` exists because
+  a comment saying *"do not do this"* would not have held.
 - **Prose comments are not required anywhere, and were removed from everything outside
   `Components/`** (DN-044). Rationale belongs in the ticket that decided it — that is what Document
   Driven Development is for, and a second copy in the source is one nothing keeps in sync. Comments
@@ -318,11 +334,13 @@ The discarded allocation is accepted: a ViewModel here stores two references and
 **Do not "fix" it by making the ViewModel optional and building it in `.task`** — that trades a cheap
 allocation for an optional unwrap in every body and a loading state that means two different things.
 
-**Any `#Preview` of a view that reads the router must inject one** — `@Environment(DapurNauraAppRouter.self)`
-is non-optional and traps when absent:
+**Any `#Preview` of a view that reads an environment object must inject one.** There are two —
+`DapurNauraAppRouter` and `ToastCenter` (DN-048) — and `@Environment(Type.self)` is non-optional, so
+it traps when absent rather than falling back:
 
 ```swift
 #Preview { CookingClassListView(...).environment(DapurNauraAppRouter()) }
+#Preview { LoginView(...).environment(ToastCenter()) }
 ```
 
 Previewing the `Content` view instead avoids this entirely, which is the other reason §3 wants the
@@ -343,6 +361,11 @@ document — it was established by DN-012 and lived only in a commit message unt
 - **It also chooses which screen is the root** (DN-040): login, or the app behind it. That is a root
   *swap*, not a push — the login screen cannot be returned to, and a hidden back button would still
   leave a back gesture.
+- **It owns the app's two environment objects** — `DapurNauraAppRouter` (§4) and `ToastCenter`
+  (DN-048) — each `@State` here and injected once with `.environment(…)`. **Shared observable state
+  reaches views this way and not as a singleton**, which is also what keeps it free at render time:
+  this body reads neither object's contents, so the value it injects never changes and no reader is
+  invalidated by a toast or a push.
 
 > **`hasPassedLogin` is not a session, and nothing may treat it as one.** It is a `@State` boolean
 > meaning *this launch has been past a screen*. No credential is checked, nothing is stored, and it

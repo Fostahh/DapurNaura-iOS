@@ -26,6 +26,22 @@ struct RouteDestination: View {
 
         case .recipes(.detail(_, let recipeId)):
             RecipeDetailView(viewModel: factory.makeRecipeDetail(recipeId: recipeId))
+
+        case .payment(.destination(let classId, let className, let price)):
+            PaymentDestinationView(
+                viewModel: factory.makePaymentDestination(),
+                classId: classId,
+                className: className,
+                price: price
+            )
+
+        case .payment(.proof(_, let className, let price, let bank, let accountNumber)):
+            PaymentProofView(
+                className: className,
+                price: price,
+                bank: bank,
+                accountNumber: accountNumber
+            )
         }
     }
 }
