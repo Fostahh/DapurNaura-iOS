@@ -11,6 +11,7 @@ import DNLibrary
 struct RecipeDetailContent: View {
     let state: RecipeDetailViewModel.State
     let onRetry: () -> Void
+    let onStartCooking: () -> Void
 
     var body: some View {
         switch state {
@@ -50,6 +51,17 @@ struct RecipeDetailContent: View {
                     }
                 }
                 .padding()
+            }
+            .safeAreaInset(edge: .bottom) {
+                Button(action: onStartCooking) {
+                    Text("Mulai buat resep")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .padding(.horizontal, DesignConstants.sectionSpacing)
+                .padding(.vertical, DesignConstants.rowGutter)
+                .background(.bar)
             }
             .navigationTitle(recipe.name)
         }
@@ -128,18 +140,23 @@ private let topingComponent = RecipeComponent(
 )
 
 #Preview("Memuat") {
-    RecipeDetailContent(state: .loading, onRetry: {})
+    RecipeDetailContent(state: .loading, onRetry: {}, onStartCooking: {})
 }
 
 #Preview("Gagal") {
-    RecipeDetailContent(state: .failed("Tidak ada koneksi internet."), onRetry: {})
+    RecipeDetailContent(
+        state: .failed("Tidak ada koneksi internet."),
+        onRetry: {},
+        onStartCooking: {}
+    )
 }
 
 #Preview("Dua komponen") {
     NavigationStack {
         RecipeDetailContent(
             state: .loaded(previewRecipe(components: [browniesComponent, topingComponent])),
-            onRetry: {}
+            onRetry: {},
+            onStartCooking: {}
         )
     }
 }
@@ -155,7 +172,8 @@ private let topingComponent = RecipeComponent(
                 )],
                 portions: "20 pcs"
             )),
-            onRetry: {}
+            onRetry: {},
+            onStartCooking: {}
         )
     }
 }

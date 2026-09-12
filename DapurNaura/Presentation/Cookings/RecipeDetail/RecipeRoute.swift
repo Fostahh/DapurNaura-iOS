@@ -9,4 +9,5 @@ import Foundation
 
 enum RecipeRoute: Hashable {
     case detail(classId: String, recipeId: String)
+    case cook(recipeId: String)
 }
