@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Fostahh/SPMDNLibrary.git",
       "state" : {
-        "revision" : "dab47fc38f7214f9f0aada4503461bb2d5602a47",
-        "version" : "0.9.0"
+        "revision" : "068aa90883b36eea0eaf4a492d8d331b4cc81c34",
+        "version" : "0.9.1"
       }
     }
   ],
