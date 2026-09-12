@@ -25,7 +25,13 @@ struct RouteDestination: View {
             OfflineClassScheduleView(viewModel: factory.makeOfflineClassSchedule())
 
         case .recipes(.detail(_, let recipeId)):
-            RecipeDetailView(viewModel: factory.makeRecipeDetail(recipeId: recipeId))
+            RecipeDetailView(
+                recipeId: recipeId,
+                viewModel: factory.makeRecipeDetail(recipeId: recipeId)
+            )
+
+        case .recipes(.cook(let recipeId)):
+            CookingFlowView(viewModel: factory.makeCookingFlow(recipeId: recipeId))
 
         case .payment(.destination(let classId, let className, let price)):
             PaymentDestinationView(

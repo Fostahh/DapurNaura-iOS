@@ -35,6 +35,16 @@ struct ViewModelFactory {
         RecipeDetailViewModel(recipeId: recipeId, getRecipe: dataLayer.getRecipe)
     }
 
+    func makeCookingFlow(recipeId: String) -> CookingFlowViewModel {
+        CookingFlowViewModel(
+            recipeId: recipeId,
+            getRecipe: dataLayer.getRecipe,
+            getProgress: dataLayer.getRecipeProgress,
+            saveProgress: dataLayer.saveRecipeProgress,
+            clearProgress: dataLayer.clearRecipeProgress
+        )
+    }
+
     func makePaymentDestination() -> PaymentDestinationViewModel {
         PaymentDestinationViewModel(getPaymentDestinations: dataLayer.getPaymentDestinations)
     }
