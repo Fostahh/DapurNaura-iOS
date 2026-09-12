@@ -8,19 +8,9 @@
 import SwiftUI
 import DNLibrary
 
-/// `merk` is given visible weight deliberately. It is commercial advice, not decoration —
-/// the audience is people learning to cook **for income**, and the owner names both the brand
-/// to buy and the cheaper one that still works. Burying it as a footnote would drop half the
-/// teaching.
-///
-/// `merk` and `note` are independently optional, and absent is not blank: a row simply does not
-/// draw what it was not given.
 struct IngredientRow: View {
     let ingredient: Ingredient
 
-    /// The column holds text, so it scales with the text (DN-038). §9 owns the base number; a view
-    /// owns how it grows. Fixed at 72pt the quantity truncated at the larger accessibility sizes —
-    /// the font scaled and the box it sat in did not.
     @ScaledMetric(relativeTo: .subheadline) private var quantityWidth = DesignConstants.quantityColumnWidth
 
     var body: some View {

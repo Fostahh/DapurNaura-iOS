@@ -11,7 +11,14 @@ import DNLibrary
 @main
 @MainActor
 struct DapurNauraApp: App {
-    private let factory = ViewModelFactory(dataLayer: DNDataLayer.companion.stub())
+    private let factory = ViewModelFactory(
+        dataLayer: DNDataLayer(
+            config: DNNetworkManagerConfig(
+                baseUrl: DapurNauraAppConfig.baseURL,
+                apiKey: DapurNauraAppConfig.apiKey
+            )
+        )
+    )
 
     @State private var router = DapurNauraAppRouter()
 

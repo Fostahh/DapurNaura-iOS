@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-/// A tinted card with its picture hanging over the top edge, a title and one line
-/// beneath it.
-///
-/// Takes plain values and names no `Route` (§4) — it does not know whether pressing
-/// it pushes a screen or raises a sheet, which is exactly why the same card can do
-/// both. The caller wraps it in a `NavigationLink(value:)` or a `Button`.
 struct ClassKindCard: View {
     let imageURL: String
     let title: String
@@ -32,8 +26,6 @@ struct ClassKindCard: View {
         .foregroundStyle(.white)
         .frame(maxWidth: .infinity)
         .padding(DesignConstants.classCardPadding)
-        // Clears the part of the circle hanging into the card, so the title starts
-        // below the picture rather than behind it.
         .padding(.top, DesignConstants.classCardImageHeadRoom)
         .background(tint, in: .rect(cornerRadius: DesignConstants.classCardCornerRadius))
         .overlay(alignment: .top) {
@@ -45,8 +37,6 @@ struct ClassKindCard: View {
                 .clipShape(.circle)
                 .offset(y: -DesignConstants.classCardImageOverlap)
         }
-        // The offset picture draws outside the card, so the row has to reserve the
-        // space itself — layout does not grow to fit an offset view.
         .padding(.top, DesignConstants.classCardImageOverlap)
     }
 }

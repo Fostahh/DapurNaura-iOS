@@ -25,8 +25,11 @@ Indonesia. Audience is people learning to cook.
 choice the app opens onto (DN-033), the cooking-class list with its category filter (DN-009, DN-025),
 the class detail (DN-012), the recipe screen (DN-021 — ~~a placeholder~~ replaced with the real
 thing), the offline class schedule (DN-036), and the two payment screens the buy button now opens
-(DN-048). Everything fetched comes from `DNLibrary`'s `DNDataLayer.stub()` (contract replay; no
-backend exists yet). Video is still to build.
+(DN-048). **The Development build fetches from a local Mockoon server on port 3001** (DN-050),
+which serves the approved contract fixtures over **HTTPS**; `DNDataLayer.stub()` replays the same
+fixtures in-process and is still what the library's tests use. **Mockoon runs on the owner's machine
+only** — the environment file is committed nowhere, so on any other machine the app shows its
+failure states until the composition root is pointed back at `stub()`. Video is still to build.
 
 **The payment screens do not complete a payment**, and that is deliberate (DN-048). They show the
 bank accounts, copy an account number, and take a photograph of the transfer receipt — then send
@@ -61,18 +64,19 @@ repeated here.
 The entry points worth naming:
 
 - **`DapurNaura/App/DapurNauraApp.swift`** — `@main` and the **composition root**: builds
-  `DNDataLayer.stub()`, constructs the `ViewModelFactory` and owns the app's two environment
-  objects — the `DapurNauraAppRouter` and the `ToastCenter` (DN-048).
-  Swapping stub → live `DNDataLayer(config:)` happens here, and only here, when a backend exists.
+  `DNDataLayer(config:)` from `DapurNauraAppConfig` (DN-050), constructs the `ViewModelFactory` and
+  owns the app's two environment objects — the `DapurNauraAppRouter` and the `ToastCenter` (DN-048).
+  Pointing the app back at `DNDataLayer.stub()` is a one-line change here, and nowhere else.
 - **`DapurNaura/App/RootView.swift`** — which flow is on screen, and the animated swap between them
   (DN-043). **It is a `View` rather than code inside `DapurNauraApp` for a load-bearing reason:**
   `withAnimation` around state owned by an `App` animates nothing, because the transaction does not
   cross the `Scene` boundary into the `WindowGroup`'s content. That defect shipped once already.
   **Do not move this back up.**
 - **`DapurNaura/App/DapurNauraAppConfig.swift`** — reads build-variant values out of `Info.plist`, see
-  [Build variants](#build-variants). **Still uncalled** — the stub path needs no URL or key. Its
-  first caller is the live-backend switch, which must also replace the stale RAWG `API_BASE_URL`
-  in the xcconfigs.
+  [Build variants](#build-variants). **Called since DN-050** by the composition root, which is what
+  finally exercises the variant plumbing. `Development.xcconfig` now points at Mockoon;
+  **Alpha, Beta and Release still carry the stale RAWG `API_BASE_URL`** and must not be pointed
+  anywhere until a real backend exists.
 
 Tests: `DapurNauraTests/` (Swift Testing, `@Test` / `#expect`) and `DapurNauraUITests/` (XCTest).
 Both are empty scaffolding.
@@ -80,6 +84,28 @@ Both are empty scaffolding.
 **UI work is not automatically tested.** Per the platform Definition of Done, unit tests are
 required for the data layer only; UI is verified manually by the human. Do not add Swift tests
 unless a ticket explicitly asks for them.
+
+### Comments
+
+**Owner's rule, 2026-09-12 (DN-050). Comments exist in two places in this app and nowhere else:**
+
+1. **The Xcode file header** — all 72 Swift files carry one and they stay. The owner was asked
+   directly whether the seventeen files DN-050 touched should lose theirs, and chose to keep them so
+   the app does not end up with files shaped two different ways.
+2. **`Presentation/Components/`** — the shared components, including `Components/Toast/`. They are
+   read by people who did not write them, which is what earns the exception.
+
+Everything else carries code and nothing else. **Do not add a comment outside those two places** —
+not a `///` doc comment, not an explanatory `//`. Reasoning belongs in the ticket.
+
+**`// MARK:` is the exception, and stays.** Owner's decision: it drives Xcode's jump bar, so it is
+navigation rather than prose. Seven lines across four files today.
+
+> **A flow's own `Presentation/<Flow>/Components/` folder is not covered.** DN-044's rule granted the
+> exception to any `Components/` folder; DN-050 narrowed it to the shared one on the owner's
+> instruction — *"remove comments inside Presentation/Flow/Components. Not Presentation/Components."*
+> 186 explanatory lines came out of the seventeen files under the eight flow folders. The surviving
+> boundary is about **reach**, not about being a component.
 
 ## Build & test
 
@@ -284,9 +310,10 @@ final commit that bumps to the new version after release. By design, not a bug t
    **Which version the app currently pins is read from `project.pbxproj`, not from here** — a
    version written into this file is stale at the next release (DN-029).
 
-4. **Nothing consumes `DapurNauraAppConfig`.** The variant plumbing is verified end to end, but the stub
-   data path needs no URL or key, so `DapurNauraAppConfig` stays uncalled until the live-backend switch —
-   a regression in it would currently be silent.
+4. ~~**Nothing consumes `DapurNauraAppConfig`.**~~ **Resolved by DN-050** — the composition root
+   reads `baseURL` and `apiKey` from it, so a regression in the variant plumbing now fails loudly at
+   launch instead of silently. **Only `Development` points anywhere real**; the other three still
+   carry the RAWG placeholder, so this is verified on one configuration of four.
 
 5. **Stale SPM state survives a rebuild, and it hides in four places.** Hit by DN-025, DN-035/DN-036
    and DN-037 — each time in a different cache, each time with a symptom that does not look like

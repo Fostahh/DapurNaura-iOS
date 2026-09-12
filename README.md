@@ -52,8 +52,10 @@ designed for dark mode is wasted work, and nothing rotates.
 *Screens are listed with the ticket that built them and no count, deliberately — a number here goes
 stale on the next merge and nothing forces anyone to update it.*
 
-**There is no backend.** The app runs on `DNDataLayer.stub()`, which replays the approved contract
-fixtures through the library's real decoding path.
+**There is no deployed backend.** The Development build talks to a **local Mockoon server on port
+3001** (DN-050) serving the approved contract fixtures; it runs on the owner's machine and is
+committed nowhere. `DNLibrary`'s `DNDataLayer.stub()` replays the same fixtures in-process and is
+the path that works with nothing running — one line in `DapurNauraApp` chooses between them.
 
 ## Tech stack
 
