@@ -7,16 +7,6 @@
 
 import SwiftUI
 
-/// The area the proof goes in: an invitation when empty, the picture itself when filled.
-///
-/// **One area rather than a button and a thumbnail.** It is the screen's whole purpose, so it takes
-/// the space; and the preview matters — without it the user cannot tell which screenshot was picked,
-/// which is the likeliest mistake here.
-///
-/// **Both states offer both sources.** The empty state says *"Ketuk untuk pilih bukti transfer"*, so
-/// the area it says that in is a button; *Ganti* on a filled one asks the same question. A receipt
-/// photographed badly has to be retakeable, and before this the replace control could only reopen
-/// the gallery — no way back to the camera at all.
 struct ProofDropzone: View {
     let proof: UIImage?
     let onPickGallery: () -> Void
@@ -34,16 +24,6 @@ struct ProofDropzone: View {
         }
     }
 
-    /// **The picture is an overlay on an empty box, and it must stay one.**
-    ///
-    /// `scaledToFill` reports a size *larger* than the space it was offered — that is what filling
-    /// means — and a view reporting 667pt inside a 390pt screen makes the whole `VStack` 667pt wide,
-    /// so every row on the screen is drawn off both edges. A landscape photograph in a tall slot is
-    /// all it takes. `.clipped()` does not save it: clipping trims what is drawn, never what was
-    /// claimed.
-    ///
-    /// Overlay content is sized by its host and cannot push back on it, so the box decides the
-    /// layout and the picture only fills it.
     private func filled(_ proof: UIImage) -> some View {
         Color.clear
             .frame(maxWidth: .infinity)

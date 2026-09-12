@@ -22,9 +22,6 @@ struct RecipeRow: View {
                 Text(recipe.name)
                     .font(.subheadline.bold())
 
-                // Portions and loyang are separate concepts and are never merged into
-                // one string. They arrive nil for a class that has not been bought —
-                // absent, not blank, so "locked" stays distinguishable from "no value".
                 if let portions = recipe.portions {
                     Text("Porsi: \(portions)")
                         .font(.caption)

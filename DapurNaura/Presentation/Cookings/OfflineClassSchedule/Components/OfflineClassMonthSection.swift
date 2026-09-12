@@ -8,9 +8,6 @@
 import SwiftUI
 import DNLibrary
 
-/// A month heading with its classes underneath, which the reader can fold away.
-///
-/// Names no `Route` (§4): pressing a class is a closure the screen supplies.
 struct OfflineClassMonthSection: View {
     let month: OfflineClassMonth
     let isCollapsed: Bool
@@ -29,16 +26,12 @@ struct OfflineClassMonthSection: View {
                         OfflineClassRow(offlineClass: offlineClass)
                     }
                     .buttonStyle(.plain)
-                    // Rows slide out from under the heading rather than blinking away. Asymmetric
-                    // on purpose: they leave upward, towards the header that swallowed them.
                     .transition(
                         .opacity.combined(with: .move(edge: .top))
                     )
                 }
             }
         }
-        // On the whole section, not just the chevron: the rows appearing and the arrow turning are
-        // one gesture's worth of movement, so they have to run on one animation.
         .animation(.snappy, value: isCollapsed)
     }
 
@@ -66,11 +59,6 @@ struct OfflineClassMonthSection: View {
         .buttonStyle(.plain)
     }
 
-    /// **Absent rather than zero when every class that month is full.** A `0` beside a chevron
-    /// reads as an error; nothing at all reads as "no room here", which is what it means.
-    ///
-    /// It is what makes a *closed* section still worth reading — a reader scanning two folded
-    /// months can see where there is still room without opening either.
     @ViewBuilder
     private var joinableCount: some View {
         if month.joinableCount > 0 {
@@ -108,7 +96,6 @@ struct OfflineClassMonthSection: View {
                 onSelect: { _ in }
             )
 
-            // Every class full — the section shows no number at all.
             OfflineClassMonthSection(
                 month: OfflineClassPreviewSamples.august(),
                 isCollapsed: false,

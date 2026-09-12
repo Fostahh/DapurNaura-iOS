@@ -8,12 +8,6 @@
 import SwiftUI
 import DNLibrary
 
-/// The order summary, and the account the user copied on the previous screen.
-///
-/// **The destination line is here because copying navigates away.** The number left the screen
-/// at the moment the user was about to type it elsewhere; showing it again is what makes that
-/// safe. The amount is repeated for the same reason — the transfer is typed between the two
-/// screens, so the figure has to be checkable where it is confirmed.
 struct ProofSummaryCard: View {
     let className: String
     let price: Int64

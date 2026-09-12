@@ -23,6 +23,8 @@ INFOPLIST_FILE = DapurNaura/Info.plist
 PRODUCT_BUNDLE_IDENTIFIER = id.dn.fostah.DapurNaura.dev
 APP_DISPLAY_NAME = DapurNaura Dev
 
-API_BASE_URL = https:/$()/api.rawg.io/api/games
+// DN-050 — the local Mockoon environment, port 3001, over TLS. Development only: Alpha, Beta and
+// Release keep the placeholder until a real backend exists.
+API_BASE_URL = https:/$()/localhost:3001
 API_KEY = $(STAGING_API_KEY)
 ENABLE_NETWORK_LOGGING = YES

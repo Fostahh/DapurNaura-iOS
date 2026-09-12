@@ -165,10 +165,15 @@ schedule). Every screen lives in one of them.
   comments."* Views, ViewModels, routes, content views and `Constants/` carry the Xcode header,
   `// MARK:` dividers, and **nothing else** — no `///` doc comments, no explanatory `//` lines.
 
-  **Components are the exception, and only components.** `Presentation/Components/` and a feature's
-  own `Components/` folder may document what a component is for and how it is meant to be used,
-  because a component is read by people who did not write it. Everything else is read beside its
-  ticket.
+  **~~Components are the exception, and only components.~~ `Presentation/Components/` is the
+  exception, and only it.** Narrowed by DN-050, 2026-09-12, on the owner's instruction: *"remove
+  comments inside Presentation/Flow/Components. Not Presentation/Components."* A feature's own
+  `Components/` folder **no longer carries prose** — 186 explanatory lines came out of the seventeen
+  files under the eight `Presentation/<Flow>/Components/` folders.
+
+  **The surviving boundary is about reach, not about being a component.** `Presentation/Components/`
+  is shared by every flow and read by people who did not write it; a flow's own components belong to
+  one screen and are read beside that screen's ticket, like everything else here.
 
   **Why it keeps coming back, so the next agent does not repeat it:** an explanation feels free to
   write and reads as diligence. It is neither — it is a second description of the code that nothing
@@ -176,11 +181,17 @@ schedule). Every screen lives in one of them.
   important to lose, it belongs in the ticket or in this document, not above the line it describes.**
   A rule the compiler or SwiftLint can hold is better still: `no_toast_in_viewmodel` exists because
   a comment saying *"do not do this"* would not have held.
-- **Prose comments are not required anywhere, and were removed from everything outside
-  `Components/`** (DN-044). Rationale belongs in the ticket that decided it — that is what Document
-  Driven Development is for, and a second copy in the source is one nothing keeps in sync. Comments
-  that remain must still be English (§8). **`Components/` was excluded by the owner** and keeps its
-  documentation.
+- **Prose comments are not required anywhere, and have been removed from everything outside
+  `Presentation/Components/`** (DN-044, narrowed by DN-050). Rationale belongs in the ticket that
+  decided it — that is what Document Driven Development is for, and a second copy in the source is
+  one nothing keeps in sync. Comments that remain must still be English (§8).
+  **Only `Presentation/Components/` is excluded** and keeps its documentation; DN-044's wider
+  `Components/` carve-out is gone.
+
+  **The Xcode file header is not prose and stays everywhere** — all 72 Swift files carry one. The
+  owner was asked directly during DN-050 whether the seventeen files should lose theirs and chose to
+  keep them, so the app does not end up with seventeen files shaped differently from the other
+  fifty-five. `// MARK:` dividers are likewise untouched.
 - **No junk-drawer folder.** A folder named for what its contents are *not* — `Helper/`, `Utils/`,
   `Misc/` — attracts everything nobody classified. `Helper/` existed here until DN-016 emptied it,
   and is not to come back. Anything that would go in one either belongs to a feature, is shared and
@@ -357,7 +368,9 @@ document — it was established by DN-012 and lived only in a commit message unt
 - The object graph is hand-wired in **`ViewModelFactory`**. **No DI framework**, matching the data
   layer's §1.
 - Views receive a factory, never the data layer and never a repository.
-- Swapping `DNDataLayer.stub()` for the live `DNDataLayer(config:)` happens here and nowhere else.
+- **Which data source the app uses is decided here and nowhere else.** Since DN-050 that is
+  `DNDataLayer(config:)`, built from `DapurNauraAppConfig` — Mockoon on `https://localhost:3001` in
+  Development. `DNDataLayer.stub()` is one line away and still the path that needs nothing running.
 - **It also chooses which screen is the root** (DN-040): login, or the app behind it. That is a root
   *swap*, not a push — the login screen cannot be returned to, and a hidden back button would still
   leave a back gesture.

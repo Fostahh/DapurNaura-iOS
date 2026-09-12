@@ -8,20 +8,10 @@
 import SwiftUI
 import DNLibrary
 
-/// One account, in its bank's colour, with the number as the largest thing on it.
-///
-/// The number is the hero because it is what the user has come to read and copy; the bank's name
-/// and the holder are context around it.
-///
-/// **There is no bank logo, and no placeholder standing in for one.** Owner's decision, 2026-09-12.
-/// The bank is identified in text, which is what a transfer actually needs; drawing its mark would
-/// reproduce a trademark, and Mandiri's own brand guideline forbids redrawing or recolouring it.
-/// An empty box reserving the space read as a missing asset rather than as a choice.
 struct BankAccountCard: View {
     let destination: PaymentDestination
     let onCopy: () -> Void
 
-    /// Mapped here, at the one place a library `Bank` meets the screen.
     private var brand: BankBrand { BankBrand(destination) }
 
     var body: some View {
