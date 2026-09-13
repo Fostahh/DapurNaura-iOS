@@ -43,8 +43,13 @@ What runs today, against stub data, in the order a user meets it:
   photograph of the transfer receipt. **Nothing is sent yet**: there is no API call, so the class
   still reads *Belum Dibeli* afterwards and a toast is what confirms the proof was taken
 
-Not built yet: video playback, the upload itself, and **any notion of a signed-in user** — the
-login screen above is the visible half of that gap and closes none of it.
+- **Guided cooking** (DN-052, DN-053) — three pages a purchased recipe opens into: tick off the
+  ingredients, follow the method against the video, then a finishing page. Progress survives leaving
+  the screen (DN-051), and tapping a step seeks the video to that moment
+
+Not built yet: the upload itself, and **any notion of a signed-in user** — the login screen above is
+the visible half of that gap and closes none of it. **The video is a placeholder**: a YouTube embed
+standing in until the owner supplies recordings, which will be `.mp4` played by `AVPlayer`.
 
 **Light mode and portrait only** (DN-039), enforced in all four build configurations. A screen
 designed for dark mode is wasted work, and nothing rotates.

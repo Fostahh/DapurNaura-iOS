@@ -1,5 +1,5 @@
 //
-//  CookingFlowViewModel.swift
+//  GuidedCookingViewModel.swift
 //  DapurNaura
 //
 //  Created by Mohammad Azri Khairuddin on 12/09/26.
@@ -10,7 +10,7 @@ import DNLibrary
 
 @MainActor
 @Observable
-final class CookingFlowViewModel {
+final class GuidedCookingViewModel {
 
     enum State {
         case loading
@@ -29,6 +29,8 @@ final class CookingFlowViewModel {
     private let getProgress: GetRecipeProgressUseCase
     private let saveProgress: SaveRecipeProgressUseCase
     private let clearProgress: ClearRecipeProgressUseCase
+
+    @ObservationIgnored private var persistTask: Task<Void, Never>?
 
     init(
         recipeId: String,
@@ -92,8 +94,6 @@ final class CookingFlowViewModel {
         persist()
     }
 
-    /// Forgets the stored progress. The visible reset is [resetToFirstPage], so the caller can
-    /// animate the page swap without wrapping an `await`.
     func clearStoredProgress() async {
         _ = try? await clearProgress.invoke(recipeId: recipeId)
     }
@@ -130,6 +130,10 @@ final class CookingFlowViewModel {
             ),
             pageIndex: Int32(pageIndex)
         )
-        Task { _ = try? await saveProgress.invoke(recipeId: recipeId, progress: progress) }
+        let previous = persistTask
+        persistTask = Task {
+            await previous?.value
+            _ = try? await saveProgress.invoke(recipeId: recipeId, progress: progress)
+        }
     }
 }

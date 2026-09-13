@@ -31,7 +31,7 @@ struct RouteDestination: View {
             )
 
         case .recipes(.cook(let recipeId)):
-            CookingFlowView(viewModel: factory.makeCookingFlow(recipeId: recipeId))
+            GuidedCookingView(viewModel: factory.makeGuidedCooking(recipeId: recipeId))
 
         case .payment(.destination(let classId, let className, let price)):
             PaymentDestinationView(
