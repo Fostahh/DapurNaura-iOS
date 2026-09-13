@@ -1,5 +1,5 @@
 //
-//  CookingFlowControls.swift
+//  GuidedCookingControls.swift
 //  DapurNaura
 //
 //  Created by Mohammad Azri Khairuddin on 12/09/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CookingFlowControls: View {
+struct GuidedCookingControls: View {
     let canGoBack: Bool
     let onNext: () -> Void
     let onBack: () -> Void
@@ -37,6 +37,6 @@ struct CookingFlowControls: View {
 #Preview {
     VStack(spacing: 0) {
         Spacer()
-        CookingFlowControls(canGoBack: false, onNext: {}, onBack: {})
+        GuidedCookingControls(canGoBack: false, onNext: {}, onBack: {})
     }
 }

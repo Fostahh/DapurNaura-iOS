@@ -35,8 +35,8 @@ struct ViewModelFactory {
         RecipeDetailViewModel(recipeId: recipeId, getRecipe: dataLayer.getRecipe)
     }
 
-    func makeCookingFlow(recipeId: String) -> CookingFlowViewModel {
-        CookingFlowViewModel(
+    func makeGuidedCooking(recipeId: String) -> GuidedCookingViewModel {
+        GuidedCookingViewModel(
             recipeId: recipeId,
             getRecipe: dataLayer.getRecipe,
             getProgress: dataLayer.getRecipeProgress,

@@ -1,5 +1,5 @@
 //
-//  CookingFlowProgressBar.swift
+//  GuidedCookingProgressBar.swift
 //  DapurNaura
 //
 //  Created by Mohammad Azri Khairuddin on 12/09/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CookingFlowProgressBar: View {
+struct GuidedCookingProgressBar: View {
     let pageIndex: Int
     let pageCount: Int
 
@@ -35,8 +35,8 @@ struct CookingFlowProgressBar: View {
 
 #Preview {
     VStack(spacing: 24) {
-        CookingFlowProgressBar(pageIndex: 0, pageCount: 3)
-        CookingFlowProgressBar(pageIndex: 1, pageCount: 3)
-        CookingFlowProgressBar(pageIndex: 2, pageCount: 3)
+        GuidedCookingProgressBar(pageIndex: 0, pageCount: 3)
+        GuidedCookingProgressBar(pageIndex: 1, pageCount: 3)
+        GuidedCookingProgressBar(pageIndex: 2, pageCount: 3)
     }
 }

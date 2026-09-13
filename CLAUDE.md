@@ -24,12 +24,15 @@ Indonesia. Audience is people learning to cook.
 **The screens, in the order a user meets them:** login (DN-040), the Kelas Online / Kelas Offline
 choice the app opens onto (DN-033), the cooking-class list with its category filter (DN-009, DN-025),
 the class detail (DN-012), the recipe screen (DN-021 — ~~a placeholder~~ replaced with the real
-thing), the offline class schedule (DN-036), and the two payment screens the buy button now opens
-(DN-048). **The Development build fetches from a local Mockoon server on port 3001** (DN-050),
-which serves the approved contract fixtures over **HTTPS**; `DNDataLayer.stub()` replays the same
+thing), the offline class schedule (DN-036), the two payment screens the buy button now opens
+(DN-048), and the guided cooking screen a purchased recipe opens into (DN-052, DN-053). **The
+Development build fetches from a local Mockoon server on port 3001** (DN-050), which serves the
+approved contract fixtures over **HTTPS**; `DNDataLayer.stub()` replays the same
 fixtures in-process and is still what the library's tests use. **Mockoon runs on the owner's machine
 only** — the environment file is committed nowhere, so on any other machine the app shows its
-failure states until the composition root is pointed back at `stub()`. Video is still to build.
+failure states until the composition root is pointed back at `stub()`. **The video is built but is
+a placeholder** (DN-053) — a YouTube embed in a `WKWebView`, standing in until the owner supplies
+recordings, which the contract already describes as `.mp4`.
 
 **The payment screens do not complete a payment**, and that is deliberate (DN-048). They show the
 bank accounts, copy an account number, and take a photograph of the transfer receipt — then send

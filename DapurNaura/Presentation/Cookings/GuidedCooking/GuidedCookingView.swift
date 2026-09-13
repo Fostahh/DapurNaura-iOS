@@ -1,5 +1,5 @@
 //
-//  CookingFlowView.swift
+//  GuidedCookingView.swift
 //  DapurNaura
 //
 //  Created by Mohammad Azri Khairuddin on 12/09/26.
@@ -8,11 +8,15 @@
 import SwiftUI
 import DNLibrary
 
-struct CookingFlowView: View {
+struct GuidedCookingView: View {
     @Environment(DapurNauraAppRouter.self) private var router
-    @State private var viewModel: CookingFlowViewModel
+    @State private var viewModel: GuidedCookingViewModel
+    @State private var controlsVisible = true
+    @State private var idleTask: Task<Void, Never>?
 
-    init(viewModel: CookingFlowViewModel) {
+    private static let idleDelay = Duration.seconds(5)
+
+    init(viewModel: GuidedCookingViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
 
@@ -34,20 +38,20 @@ struct CookingFlowView: View {
 
             case .loaded(let recipe):
                 VStack(spacing: 0) {
-                    CookingFlowProgressBar(
+                    GuidedCookingProgressBar(
                         pageIndex: viewModel.pageIndex,
-                        pageCount: CookingFlowViewModel.pageCount
+                        pageCount: GuidedCookingViewModel.pageCount
                     )
 
-                    CookingFlowPager(
+                    GuidedCookingPager(
                         recipe: recipe,
                         viewModel: viewModel,
                         onRestart: restart,
                         onFinish: finish
                     )
 
-                    if viewModel.pageIndex < CookingFlowViewModel.pageCount - 1 {
-                        CookingFlowControls(
+                    if controlsVisible, viewModel.pageIndex < GuidedCookingViewModel.pageCount - 1 {
+                        GuidedCookingControls(
                             canGoBack: viewModel.pageIndex > 0,
                             onNext: next,
                             onBack: back
@@ -57,7 +61,27 @@ struct CookingFlowView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .contentShape(.rect)
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0).onChanged { _ in registerActivity() }
+        )
         .task { await viewModel.load() }
+        .task { registerActivity() }
+        .onDisappear { idleTask?.cancel() }
+    }
+
+    private func registerActivity() {
+        idleTask?.cancel()
+
+        if !controlsVisible {
+            withAnimation(.snappy) { controlsVisible = true }
+        }
+
+        idleTask = Task {
+            try? await Task.sleep(for: Self.idleDelay)
+            guard !Task.isCancelled else { return }
+            withAnimation(.snappy) { controlsVisible = false }
+        }
     }
 
     private func retry() {

@@ -115,8 +115,8 @@ DapurNaura/
 ```
 
 Two flows exist: **`Auth/`** (login today; onboarding, forgotten passwords and registration expected
-to push within it) and **`Cookings/`** (the class selection, list, detail, recipe and offline
-schedule). Every screen lives in one of them.
+to push within it) and **`Cookings/`** (the class selection, list, detail, recipe, guided cooking,
+offline schedule and the two payment screens). Every screen lives in one of them.
 
 - **A flow module owns exactly one `NavigationStack`, in a `<Flow>FlowView`. Must.** The screens
   inside it own none. That is what lets `RootView` swap one flow for another without either knowing
