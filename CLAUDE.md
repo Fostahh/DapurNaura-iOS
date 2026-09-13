@@ -318,9 +318,9 @@ final commit that bumps to the new version after release. By design, not a bug t
    launch instead of silently. **Only `Development` points anywhere real**; the other three still
    carry the RAWG placeholder, so this is verified on one configuration of four.
 
-5. **Stale SPM state survives a rebuild, and it hides in four places.** Hit by DN-025, DN-035/DN-036
-   and DN-037 — each time in a different cache, each time with a symptom that does not look like
-   caching. **Do not hunt these by hand: `scripts/repin.sh <version>` clears all four, and then
+5. **Stale SPM state survives a rebuild, and it hides in five places.** Hit by DN-025, DN-035/DN-036,
+   DN-037 and DN-055 — each time in a different cache, each time with a symptom that does not look like
+   caching. **Do not hunt these by hand: `scripts/repin.sh <version>` clears them, and then
    checks the version it actually landed on.** The table is here to explain the failures, not to be
    worked through:
 
@@ -330,11 +330,18 @@ final commit that bumps to the new version after release. By design, not a bug t
    | A resolve keeps landing on the **previous** version even after `Package.resolved` is deleted, though the new tag is on the remote | `~/Library/Caches/org.swift.swiftpm/repositories/SPMDNLibrary-<hash>` — a cached clone that never fetched the new tag | delete that directory |
    | `failed downloading … DNLibrary.zip … already exists in file system` | `~/Library/Caches/org.swift.swiftpm/artifacts/https___…_DNLibrary_zip` | delete that directory |
    | A resolve keeps landing on the **previous** version **even after all three above are cleared** | `DerivedData/…/SourcePackages/workspace-state.json` — it records the resolved version, and `xcodebuild` restores from it | `rm -rf ~/Library/Developer/Xcode/DerivedData/DapurNaura-<hash>/SourcePackages` |
+   | `the package manifest at '…/checkouts/SPMDNLibrary/Package.swift' cannot be accessed … doesn't exist in file system` — **the resolve succeeded; the build is what fails** | `DerivedData/…/SourcePackages/checkouts/SPMDNLibrary` — a half-completed checkout holding `.git` but none of the tracked files | `rm -rf ~/Library/Developer/Xcode/DerivedData/DapurNaura-<hash>/SourcePackages`, then resolve again |
 
-   **The last row was found by `repin.sh` failing its own assertion on its first run** (DN-037): the
+   **Row four was found by `repin.sh` failing its own assertion on its first run** (DN-037): the
    script cleared the first three, asked for `0.8.0`, and resolved to `0.7.0`. `SourcePackages`
-   appears twice in this table because it causes two unrelated symptoms, and it had only ever been
+   appears in three rows because it causes three unrelated symptoms, and it had only ever been
    documented for the first.
+
+   **Row five is the odd one out, and that is why it was missed** (DN-055, the 0.10.1 repin): the other
+   four present as *the wrong version, quietly*, while this one presents as a missing file — which reads
+   like a corrupt clone or a bad tag rather than a cache. The tag was fine. `repin.sh` had already
+   verified the resolved version **and** its revision against the tag before the build failed, which is
+   what made the cause obvious in a minute rather than an hour.
 
    Rows two and four are the dangerous ones: nothing reports an error, the resolve simply succeeds on
    the old version, and `Package.resolved` looks deliberate afterwards. **Check the version it
